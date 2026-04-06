@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TaskWorker.API/TaskWorker.API.csproj" />
+  <Project Path="TaskWorker.Application/TaskWorker.Application.csproj" />
+  <Project Path="TaskWorker.Infrastructure/TaskWorker.Infrastructure.csproj" />
+  <Project Path="WorkerTask.Domain/TaskWorker.Domain.csproj" />
+</Solution>
