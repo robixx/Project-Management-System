@@ -10,7 +10,7 @@ namespace TaskWorker.Infrastructure.DBConnection
 {
     public class DatabaseConnection: DbContext
     {
-        public DatabaseConnection(DbContextOptions<DatabaseConnection> options) : base(options)
+        public  DatabaseConnection(DbContextOptions<DatabaseConnection> options) : base(options)
         {
 
         }
