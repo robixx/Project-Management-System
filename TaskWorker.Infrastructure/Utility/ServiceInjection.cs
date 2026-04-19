@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskWorker.Application.Interfaces;
+using TaskWorker.Infrastructure.Services;
 
 namespace TaskWorker.Infrastructure.Utility
 {
@@ -14,7 +17,7 @@ namespace TaskWorker.Infrastructure.Utility
         public static void InjectService(this IServiceCollection services)
         {
             //services.AddHttpContextAccessor();
-            //services.AddScoped<IMenuSet, MenuDAO>();
+            services.AddScoped<IAuth, AuthServices>();
         }
     }
 }
