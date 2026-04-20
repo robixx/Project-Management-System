@@ -4,12 +4,14 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 using TaskWorker.Domain.Entity;
 using TaskWorker.Infrastructure.DBConnection;
+using TaskWorker.Infrastructure.Utility;
 
 namespace TaskWorker.Infrastructure.Services
 {
@@ -77,5 +79,92 @@ namespace TaskWorker.Infrastructure.Services
                 return ($"Error occurred: {ex.Message}", false);
             }
         }
+
+        public async Task<(string Message, bool Status)> SaveUserRegisterAsync(AppSecUserDto dto)
+        {
+            await using var transaction = await _connection.Database.BeginTransactionAsync();
+
+            try
+            {
+                if (dto == null)
+                    return ("User data is empty", false);
+
+                string msg = string.Empty;
+                AppSecUser? user;
+
+                // ================= UPDATE =================
+                if (dto.Id > 0)
+                {
+                    user = await _connection.AppSecUser
+                        .FirstOrDefaultAsync(x => x.Id == dto.Id);
+                       
+                    if (user == null)
+                        return ("User not found", false);
+
+                    user.UserId = dto.UserId;
+                    user.LoginName = dto.LoginName;
+
+                    if (!string.IsNullOrWhiteSpace(dto.HashPassword))
+                    {
+                        user.HashPassword = PasswordHelper.Hash(dto.HashPassword);
+                    }
+
+                    user.IsActive = dto.IsActive;
+                    user.LastLoginDate = DateTime.Now;
+                    msg = $"{dto.LoginName} updated successfully";
+                }
+                // ================= INSERT =================
+                else
+                {
+                    user = new AppSecUser
+                    {
+                        UserId = dto.UserId,
+                        LoginName = dto.LoginName,
+                        HashPassword = PasswordHelper.Hash(dto.HashPassword ?? string.Empty),
+                        LastLoginDate = DateTime.Now,
+                        IsActive = dto.IsActive
+                    };
+
+                    await _connection.AppSecUser.AddAsync(user);
+                    msg = $"{dto.LoginName} saved successfully";
+                }
+
+                await _connection.SaveChangesAsync();
+
+                // ================= BACKUP TABLE =================
+                var backup = new AppEncryptedData
+                {
+                    OwnerId = user.UserId,
+                    EncriptedData = EncryptionHelper.MakeEncryptedData(dto.HashPassword ?? string.Empty)
+                };
+
+                await _connection.AppEncryptedData.AddAsync(backup);
+                await _connection.SaveChangesAsync();
+
+                // ================= COMMIT =================
+                await transaction.CommitAsync();
+
+                return (msg, true);
+            }
+            catch (Exception ex)
+            {
+                // ================= ROLLBACK =================
+                await transaction.RollbackAsync();
+
+                return ($"Error occurred: {ex.Message}", false);
+            }
+        }
+
+        public class EncryptionHelper
+        {
+            public static string MakeEncryptedData(string data)
+            {
+                var prefix = new Random().Next(1000, 9999);
+                var suffix = new Random().Next(1000, 9999);
+
+                return $"{prefix}-{data}-{suffix}";
+            }
+        }
+
     }
 }

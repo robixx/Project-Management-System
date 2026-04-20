@@ -13,5 +13,6 @@ namespace TaskWorker.Application.Interfaces
         Task<(string Message, bool Status)> GetBaseDataElementAsync(MetaElementDto metaElementDto);
         Task<(string Message, bool Status,List<DataElementDto>meta_list)> GetAllDataElementAsync();
         Task<List<DropDownDto>> getMetaDataAsync();
+        Task<(string Message, bool Status, List<RoleDto>role_list)> GetRoleListAsync();
     }
 }

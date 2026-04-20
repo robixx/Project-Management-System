@@ -21,11 +21,11 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpPost("metadata-create")]
         public async Task<IActionResult> CreateMetaData([FromBody] MetaDataDto metaDataDto)
         {
-            
+
             var (message, status) = await _metadata.GetBaseDataAsync(metaDataDto);
             if (status)
             {
-                return Ok(new { message , status });
+                return Ok(new { message, status });
             }
             else
             {
@@ -47,9 +47,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
 
             var (message, status) = await _metadata.GetBaseDataElementAsync(metaElementDto);
-            if( status)
+            if (status)
             {
-                return Ok(new { message,status });
+                return Ok(new { message, status });
             }
             else
             {
@@ -67,8 +67,21 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             return Ok(new
             {
                 status = data.Status,
-                message=data.Message,
+                message = data.Message,
                 data = data.meta_list
+            });
+        }
+
+
+        [HttpGet("role-list")]
+        public async Task<IActionResult> GetRoleList()
+        {
+            var data = await _metadata.GetRoleListAsync();
+            return Ok(new
+            {
+                status = data.Status,
+                message = data.Message,
+                data = data.role_list
             });
         }
     }

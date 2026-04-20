@@ -30,5 +30,16 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 message = result.Message,
             });
         }
+
+        [HttpPost("user-register")]
+        public async Task<IActionResult> UserRegister([FromBody] AppSecUserDto secUser)
+        {
+            var result = await _userinfo.SaveUserRegisterAsync(secUser);
+            return Ok(new
+            {
+                status = result.Status,
+                message = result.Message,
+            });
+        }
     }
 }

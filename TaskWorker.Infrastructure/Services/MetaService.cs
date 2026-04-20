@@ -126,5 +126,26 @@ namespace TaskWorker.Infrastructure.Services
                 throw new Exception($"Error occurred while retrieving base data: {ex.Message}");
             }
         }
+
+        public async Task<(string Message, bool Status, List<RoleDto> role_list)> GetRoleListAsync()
+        {
+            try
+            {
+                   var data = await _connection.AppRole
+                    .Select(x => new RoleDto
+                    {
+                        RoleId = x.RoleId,
+                        RoleName = x.RoleName,
+                        IsActive = x.IsActive
+                    })
+                    .ToListAsync();
+
+                return ("Roles Retrieved successfully", true, data);
+            }
+            catch (Exception ex)
+            {
+                return ($"Action method->{nameof(GetRoleListAsync)} Error->{ex.Message}", false, new List<RoleDto>());
+            }
+        }
     }
 }
