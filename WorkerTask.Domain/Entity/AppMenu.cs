@@ -25,6 +25,8 @@ namespace TaskWorker.Domain.Entity
 
         [MaxLength(100)]
         public string? ActionName { get; set; }
+        [MaxLength(100)]
+        public string? PageArea { get; set; }
 
         public int? IsParent { get; set; }
 

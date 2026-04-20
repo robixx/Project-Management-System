@@ -101,7 +101,7 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
-        public async Task<List<DropDownDto>> getMetaDataAsync()
+        public async Task<List<DropDownDto>> GetMetaDataAsync()
         {
             try
             {
@@ -145,6 +145,112 @@ namespace TaskWorker.Infrastructure.Services
             catch (Exception ex)
             {
                 return ($"Action method->{nameof(GetRoleListAsync)} Error->{ex.Message}", false, new List<RoleDto>());
+            }
+        }
+
+        public async Task<(string Message, bool Status)> RoleCreateAsync(RoleDto roleDto)
+        {
+            try
+            {
+                if(roleDto == null)
+                    return ("RoleDto is null", false);
+                var isExist = await _connection.AppRole
+                           .AnyAsync(x => x.RoleName == roleDto.RoleName
+                                       && x.RoleId != roleDto.RoleId);
+
+                if (isExist)
+                    return ($"{roleDto.RoleName} already exists", false);
+
+                string msg = string.Empty;
+
+                if (roleDto.RoleId > 0)
+                {
+                    var existingRole = await _connection.AppRole.FindAsync(roleDto.RoleId);
+                    if (existingRole != null)
+                    {
+                        existingRole.RoleName = roleDto.RoleName;
+                        existingRole.IsActive = roleDto.IsActive;
+                        msg = $"{roleDto.RoleName} Update successfully";
+                    }
+                }
+                else
+                {
+                    var query = new AppRole
+                    {
+                        RoleName = roleDto.RoleName,
+                        IsActive = roleDto.IsActive
+                    };
+                    await _connection.AppRole.AddAsync(query);
+                   
+                    msg= $"{roleDto.RoleName} Created successfully";
+                }
+                await _connection.SaveChangesAsync();
+                return (msg, true);
+            }
+            catch (Exception ex)
+            {
+                return ($"Action method->{nameof(RoleCreateAsync)} Error->{ex.Message}", false);
+
+            }
+        }
+
+        public async Task<(string Message, bool Status, List<RoleWiseMenuDto> menu_list)> RoleWiseMenuListAsync(int roleid)
+        {
+            try
+            {
+                var data = await _connection
+                       .Set<RoleWiseMenuDto>()
+                       .FromSqlRaw("SELECT * FROM get_role_wise_menu({0})", roleid)
+                       .ToListAsync();
+
+
+                return ("MenuData loaded successfully", true, data);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false, new List<RoleWiseMenuDto>());
+            }
+        }
+
+        public async Task<(string Message, bool Status)> RoleWiseMenuPermissionAsync(List<MenuPermissionDto> menudata)
+        {
+            try
+            {
+                if (menudata == null || menudata.Count == 0)
+                    return ("No valid menu data", false);
+
+                
+                var roleId = menudata.First().RoleId;
+
+                // ================= DELETE OLD PERMISSIONS =================
+                var oldPermissions = _connection.AppRoleWiseMenu
+                    .Where(x => x.RoleId == roleId);
+
+                _connection.AppRoleWiseMenu.RemoveRange(oldPermissions);
+
+                // ================= INSERT NEW PERMISSIONS =================
+                foreach (var item in menudata)
+                {
+                    if (item.IsActive == 1) // only selected menus
+                    {
+                        var entity = new AppRoleWiseMenu
+                        {
+                            RoleId = item.RoleId,
+                            MenuId = item.MenuId,
+                            IsActive = item.IsActive,
+                        };
+
+                        await _connection.AppRoleWiseMenu.AddAsync(entity);
+                    }
+                }
+
+                await _connection.SaveChangesAsync();
+
+                return ("Permission updated successfully", true);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false);
             }
         }
     }

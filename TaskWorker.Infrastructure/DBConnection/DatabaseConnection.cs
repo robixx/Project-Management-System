@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskWorker.Application.ModelViews;
 using TaskWorker.Domain.Entity;
 
 namespace TaskWorker.Infrastructure.DBConnection
@@ -32,6 +33,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppMetaElement> AppMetaElement {  get; set; }
         public DbSet<AppEncryptedData> AppEncryptedData {  get; set; }
         public DbSet<AppSecUser> AppSecUser {  get; set; }
+        public DbSet<RoleWiseMenuDto> RoleWiseMenuDto {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,6 +55,10 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppEncryptedData>().HasKey(x => x.Id);
             modelBuilder.Entity<AppSecUser>().HasKey(x => x.Id);
 
+
+            // for Procedure
+
+            modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();
 
             base.OnModelCreating(modelBuilder);
         }

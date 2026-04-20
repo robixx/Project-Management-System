@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TaskWorker.API.Areas.Admin.Controllers
 {
@@ -37,7 +38,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpGet("metadata-list")]
         public async Task<IActionResult> GetMetaDataList()
         {
-            var data = await _metadata.getMetaDataAsync();
+            var data = await _metadata.GetMetaDataAsync();
             return Ok(data);
         }
 
@@ -63,12 +64,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpGet("all-metadata-list")]
         public async Task<IActionResult> GetAllMetaDataList()
         {
-            var data = await _metadata.GetAllDataElementAsync();
+            var (message, status, meta_list) = await _metadata.GetAllDataElementAsync();
             return Ok(new
             {
-                status = data.Status,
-                message = data.Message,
-                data = data.meta_list
+                 status,
+                 message,
+                 meta_list
             });
         }
 
@@ -76,12 +77,52 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpGet("role-list")]
         public async Task<IActionResult> GetRoleList()
         {
-            var data = await _metadata.GetRoleListAsync();
+            var (message, status, role_list) = await _metadata.GetRoleListAsync();
             return Ok(new
             {
-                status = data.Status,
-                message = data.Message,
-                data = data.role_list
+                status,
+                message,
+                role_list
+            });
+        }
+
+
+        [HttpPost("role-create")]
+        public async Task<IActionResult> CreateRole([FromBody] RoleDto roleDto)
+        {
+            var (message, status) = await _metadata.RoleCreateAsync(roleDto);
+            if (status)
+            {
+                return Ok(new { message, status });
+            }
+            else
+            {
+                return Ok(new { message, status });
+            }
+        }
+
+        [HttpGet("role-wise-menu-list/{roleid}")]
+        public async Task<IActionResult> GetRoleWiseMenuList(int roleid)
+        {
+            var (status, message, menu_list) = await _metadata.RoleWiseMenuListAsync(roleid);
+            return Ok(new
+            {
+                status,
+                message,
+                menu_list
+            });
+        }
+
+
+        [HttpPost("role-wise-page-permission")]
+        public async Task<IActionResult> MenuPermission([FromBody] List<MenuPermissionDto>menudata )
+        {
+            var (status, message) = await _metadata.RoleWiseMenuPermissionAsync(menudata);
+            return Ok(new
+            {
+                status,
+                message,
+               
             });
         }
     }
