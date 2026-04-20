@@ -19,6 +19,35 @@ namespace TaskWorker.Infrastructure.Services
         {
             _connection = connection;
         }
+
+        public async Task<(string Message, bool Status, List<DataElementDto> meta_list)> GetAllDataElementAsync()
+        {
+            try
+            {
+                var data= await( from m in _connection.AppMetaElement
+                                 join me in _connection.AppMetaData on m.MetaDataId equals me.Id
+                                 where me.IsActive==1
+                                 select new DataElementDto
+                                 {
+                                     ElementId= m.ElementId,
+                                     MetaDataId= m.MetaDataId,
+                                     ElementValue= m.ElementValue,
+                                     DataElementLevel=me.DataElementLevel,
+                                     IsActive=me.IsActive,
+                                 }).ToListAsync();
+                if(data != null )
+                {
+                    return ("Data retrived successfully", true, data);
+                }
+                return ("No Data Found", false, new List<DataElementDto>());
+
+            }
+            catch (Exception ex)
+            {
+                return ($"Action method->{nameof(GetAllDataElementAsync)} Error->{ex.Message}", false, new List<DataElementDto>());
+            }
+        }
+
         public async Task<(string Message, bool Status)> GetBaseDataAsync(MetaDataDto metaDataDto)
         {
             try

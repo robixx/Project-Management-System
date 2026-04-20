@@ -56,5 +56,20 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 return BadRequest(new { message, status });
             }
         }
+
+
+
+
+        [HttpGet("all-metadata-list")]
+        public async Task<IActionResult> GetAllMetaDataList()
+        {
+            var data = await _metadata.GetAllDataElementAsync();
+            return Ok(new
+            {
+                status = data.Status,
+                message=data.Message,
+                data = data.meta_list
+            });
+        }
     }
 }

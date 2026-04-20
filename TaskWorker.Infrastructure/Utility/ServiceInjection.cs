@@ -19,6 +19,7 @@ namespace TaskWorker.Infrastructure.Utility
             //services.AddHttpContextAccessor();
             services.AddScoped<IAuth, AuthServices>();
             services.AddScoped<IBaseData, MetaService>();
+            services.AddScoped<IUserInfo, UserInfoService>();
         }
     }
 }
