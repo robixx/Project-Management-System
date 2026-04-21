@@ -35,6 +35,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppSecUser> AppSecUser {  get; set; }
         public DbSet<RoleWiseMenuDto> RoleWiseMenuDto {  get; set; }
         public DbSet<AppUserRole> AppUserRole {  get; set; }
+        public DbSet<UserRoleDto> UserRoleDto {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +62,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             // for Procedure
 
             modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();
+            modelBuilder.Entity<UserRoleDto>().HasNoKey();
 
             base.OnModelCreating(modelBuilder);
         }

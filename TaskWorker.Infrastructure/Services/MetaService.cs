@@ -259,7 +259,69 @@ namespace TaskWorker.Infrastructure.Services
 
         public async Task<(string Message, bool Status, List<UserRoleDto> user_role_list)> GetUserRoleListAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = await _connection
+                       .Set<UserRoleDto>()
+                       .FromSqlRaw("SELECT * FROM get_all_users_with_roles()")
+                       .ToListAsync();
+
+
+                return ("User wise Role data loaded successfully", true, data);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false, new List<UserRoleDto>());
+            }
+        }
+
+        public async Task<(string Message, bool Status)> RoleWiseUserPermissionAsync(List<UserRoleSetDto> userrole)
+        {
+            try
+            {
+                if (userrole == null || userrole.Count == 0)
+                    return ("No valid user role data", false);
+               
+                var userId = userrole.First().UserId;
+
+                // ✅ Validate user exists
+                var userExists = await _connection.AppUser
+                    .AnyAsync(x => x.UserId == userId);
+
+                if (!userExists)
+                    return ("Invalid UserId", false);
+
+
+
+                // ================= DELETE OLD PERMISSIONS =================
+                var oldPermissions = _connection.AppUserRole
+                    .Where(x => x.UserId == userId);
+                _connection.AppUserRole.RemoveRange(oldPermissions);
+                await _connection.SaveChangesAsync();
+                // ================= INSERT NEW PERMISSIONS =================
+                foreach (var item in userrole)
+                {
+                    if (item.IsActive == 1) // only selected menus
+                    {
+                        var entity = new AppUserRole
+                        {
+                            RoleId = item.RoleId,
+                            UserId = item.UserId,
+                            
+                        };
+
+                        await _connection.AppUserRole.AddAsync(entity);
+                    }
+                }
+
+                await _connection.SaveChangesAsync();
+
+                return ("User Role updated successfully", true);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false);
+            }
         }
     }
 }

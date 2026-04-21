@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -135,6 +136,19 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 status,
                 message,
                 user_role_list
+            });
+        }
+
+
+        [HttpPost("role-wise-user-permission")]
+        public async Task<IActionResult> UserRolePermission([FromBody] List<UserRoleSetDto> userrole)
+        {
+            var (status, message) = await _metadata.RoleWiseUserPermissionAsync(userrole);
+            return Ok(new
+            {
+                status,
+                message,
+
             });
         }
     }

@@ -18,7 +18,8 @@ namespace TaskWorker.Application.ModelViews
         public string? Designation { get; set; }
         public string? ImageName { get; set; }
         public int RoleId { get; set; }
-        public string? RoleName { get; set; }
+        public string? RoleName { get; set; } 
+        public int IsActive { get; set; }
 
     }
 }
