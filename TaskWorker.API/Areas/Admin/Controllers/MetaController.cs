@@ -125,5 +125,17 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                
             });
         }
+
+        [HttpGet("user-role-list")]
+        public async Task<IActionResult> GetUserRoleList()
+        {
+            var (status, message, user_role_list) = await _metadata.GetUserRoleListAsync();
+            return Ok(new
+            {
+                status,
+                message,
+                user_role_list
+            });
+        }
     }
 }

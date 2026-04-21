@@ -148,6 +148,8 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
+        
+
         public async Task<(string Message, bool Status)> RoleCreateAsync(RoleDto roleDto)
         {
             try
@@ -252,6 +254,12 @@ namespace TaskWorker.Infrastructure.Services
             {
                 return ($"Error: {ex.Message}", false);
             }
+        }
+
+
+        public async Task<(string Message, bool Status, List<UserRoleDto> user_role_list)> GetUserRoleListAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

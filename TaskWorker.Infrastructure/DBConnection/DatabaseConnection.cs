@@ -34,6 +34,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppEncryptedData> AppEncryptedData {  get; set; }
         public DbSet<AppSecUser> AppSecUser {  get; set; }
         public DbSet<RoleWiseMenuDto> RoleWiseMenuDto {  get; set; }
+        public DbSet<AppUserRole> AppUserRole {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,6 +55,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppWorkDocument>().HasKey(x => x.Id);
             modelBuilder.Entity<AppEncryptedData>().HasKey(x => x.Id);
             modelBuilder.Entity<AppSecUser>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserRole>().HasKey(x => x.Id);
 
 
             // for Procedure
