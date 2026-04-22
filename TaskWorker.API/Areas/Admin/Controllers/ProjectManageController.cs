@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 
@@ -7,6 +8,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("api/v1/[area]/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectManageController : Controller
     {
 

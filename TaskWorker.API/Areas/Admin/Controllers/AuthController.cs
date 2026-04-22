@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 using TaskWorker.Infrastructure.Utility;
@@ -8,17 +9,17 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("api/v1/[area]/[controller]")]
     [ApiController]
-   
+    [AllowAnonymous]
     public class AuthController : Controller
     {
         private readonly IAuth _auth;
-        private readonly JwtConfig _jwtConfig;
+        private readonly JwtConfig _jwtconfig;
         private readonly IUserInfo _userinfo;
        
         public AuthController(IAuth auth, JwtConfig jwtConfig, IUserInfo userinfo)
         {
             _auth = auth;
-            _jwtConfig = jwtConfig;
+            _jwtconfig = jwtConfig;
             _userinfo = userinfo;
         }
 
@@ -77,7 +78,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             {
                 JwtUser jwt = new()
                 {
-                    UserId = response.UserId,                   
+                    UserId = response.UserId??0,                   
                     DispalyName = response.DispalyName,
                     RoleId = response.RoleId,
                     RoleName = response.RoleName,
@@ -87,9 +88,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
                 if (jwt != null)
                 {
-                    string strToken = _jwtConfig.Generate(jwt);
+                    string strToken = _jwtconfig.Generate(jwt);
 
-                    var userProfle = await _userinfo.GetloginUser(response.UserId);
+                    var userProfle = await _userinfo.GetloginUser(response.UserId??0);
                     var jsonData = new
                     {
                         code = "200",

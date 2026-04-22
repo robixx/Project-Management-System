@@ -30,6 +30,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
+// Add authorization services
+builder.Services.AddAuthorization();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -109,6 +111,8 @@ app.UseSwaggerUI(c =>
 });
 app.UseCors("AllowFrontend");
 
+// Authentication middleware must come before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

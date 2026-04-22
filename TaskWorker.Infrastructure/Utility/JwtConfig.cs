@@ -34,8 +34,7 @@ namespace TaskWorker.Infrastructure.Utility
                 var claims = new[] {
                     new Claim(type: "JWTId", jti),
                     new Claim(type: "UserId", value: auth.UserId.ToString() ?? ""),
-                    new Claim(type: "DispalyName",value: auth.DispalyName ?? ""),
-                    new Claim(type: "EmployeeId",value: auth.EmployeeId.ToString() ??"0"),
+                    new Claim(type: "DispalyName",value: auth.DispalyName ?? ""),                   
                     new Claim(type: "RoleName",value: auth.RoleName?.ToString() ?? string.Empty),
                     new Claim(type: "RoleId",value: auth.RoleId.ToString()?? "0"),
                     new Claim(type: "TokenExpired", value: DateTime.Now.AddMinutes(expirationTime).ToString("yyyy-MM-dd HH:mm:ss")??"")
@@ -77,8 +76,7 @@ namespace TaskWorker.Infrastructure.Utility
                 var auth = new JwtUser
                 {
                     JWTId = jtiClaim,
-                    UserId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "UserId")?.Value),
-                    EmployeeId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "EmployeeId")?.Value),
+                    UserId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "UserId")?.Value),                   
                     RoleId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "RoleId")?.Value),
                     DispalyName = claims.FirstOrDefault(c => c.Type == "DispalyName")?.Value,
                     RoleName = claims.FirstOrDefault(c => c.Type == "RoleName")?.Value,

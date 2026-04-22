@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
@@ -9,6 +10,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("api/v1/[area]/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserInfoController : ControllerBase
     {
 
@@ -23,22 +25,22 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpPost("user-info-create")]
         public async Task<IActionResult> UserInfo([FromForm] AppUserDto appUserDto )
         {
-            var result= await _userinfo.SaveUserAsync(appUserDto);
+            var (status, message)= await _userinfo.SaveUserAsync(appUserDto);
             return Ok(new
             {
-                status = result.Status,
-                message = result.Message,
+                status ,
+                message,
             });
         }
 
         [HttpPost("user-register")]
         public async Task<IActionResult> UserRegister([FromBody] AppSecUserDto secUser)
         {
-            var result = await _userinfo.SaveUserRegisterAsync(secUser);
+            var (status, message) = await _userinfo.SaveUserRegisterAsync(secUser);
             return Ok(new
             {
-                status = result.Status,
-                message = result.Message,
+                status,
+                message,
             });
         }
     }

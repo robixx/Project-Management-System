@@ -54,10 +54,9 @@ namespace TaskWorker.Infrastructure.Services
 
                     string fullPath = Path.Combine(uploadPath, fileName);
 
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
+                    using var stream = new FileStream(fullPath, FileMode.Create);                    
                         await dto.ImageName.CopyToAsync(stream);
-                    }
+                    
                 }
 
                 var user = new AppUser
@@ -103,7 +102,7 @@ namespace TaskWorker.Infrastructure.Services
                     if (user == null)
                         return ("User not found", false);
 
-                    user.UserId = dto.UserId;
+                    user.UserId = dto.UserId ?? 0;
                     user.LoginName = dto.LoginName;
 
                     if (!string.IsNullOrWhiteSpace(dto.HashPassword))
@@ -120,7 +119,7 @@ namespace TaskWorker.Infrastructure.Services
                 {
                     user = new AppSecUser
                     {
-                        UserId = dto.UserId,
+                        UserId = dto.UserId??0,
                         LoginName = dto.LoginName,
                         HashPassword = PasswordHelper.Hash(dto.HashPassword ?? string.Empty),
                         LastLoginDate = DateTime.Now,
@@ -174,7 +173,7 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
-                LoginResponseDto userlist = new LoginResponseDto();
+                LoginResponseDto userlist = new();
                 var roleid = await _connection.AppUserRole
                     .Where(i => i.UserId == userId)
                     .Select(i => i.RoleId)

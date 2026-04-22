@@ -13,7 +13,7 @@ namespace TaskWorker.Domain.Entity
     {
         [Key]
         public int Id { get; set; }
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         [StringLength(250)]
         public string? LoginName { get; set; }
         [StringLength(250)]

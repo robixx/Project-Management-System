@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using TaskWorker.Application.Interfaces;
@@ -10,6 +11,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("api/v1/[area]/[controller]")]
     [ApiController]
+    [Authorize]
     public class MetaController : ControllerBase
     {
 
