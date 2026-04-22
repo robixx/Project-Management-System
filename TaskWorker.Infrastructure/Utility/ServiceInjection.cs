@@ -17,9 +17,11 @@ namespace TaskWorker.Infrastructure.Utility
         public static void InjectService(this IServiceCollection services)
         {
             //services.AddHttpContextAccessor();
+            services.AddScoped<JwtConfig>();
             services.AddScoped<IAuth, AuthServices>();
             services.AddScoped<IBaseData, MetaService>();
             services.AddScoped<IUserInfo, UserInfoService>();
+            services.AddScoped<IProject, ProjectService>();
         }
     }
 }

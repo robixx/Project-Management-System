@@ -28,6 +28,8 @@ namespace TaskWorker.Infrastructure.Services
             _config = config;
             _env = env;
         }
+
+        
         public async Task<(string Message, bool Status)> SaveUserAsync(AppUserDto dto)
         {
             try
@@ -166,5 +168,45 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
+
+
+        public async Task<LoginResponseDto> GetloginUser(int userId)
+        {
+            try
+            {
+                LoginResponseDto userlist = new LoginResponseDto();
+                var roleid = await _connection.AppUserRole
+                    .Where(i => i.UserId == userId)
+                    .Select(i => i.RoleId)
+                    .FirstOrDefaultAsync();
+                var roleName = await _connection.AppRole
+                    .Where(r => r.RoleId == roleid)
+                    .Select(r => r.RoleName)
+                    .FirstOrDefaultAsync();
+
+                var result = await _connection.AppUser
+                    .Where(u => u.IsActive == 1 && u.UserId == userId)
+                    .Select(u => new LoginResponseDto
+                    {
+                        UserId = u.UserId,
+                        DispalyName = u.UserName,
+                        RoleId = roleid,
+                        RoleName = roleName ?? ""
+                    })
+                    .FirstOrDefaultAsync();
+
+
+                if (result != null)
+                {
+                    userlist = result;
+                }
+                return userlist;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error occurred: {ex.Message}");
+            }
+
+        } 
     }
 }

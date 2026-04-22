@@ -12,5 +12,7 @@ namespace TaskWorker.Application.Interfaces
 
         Task<(string Message, bool Status)>SaveUserAsync(AppUserDto dto);
         Task<(string Message, bool Status)>SaveUserRegisterAsync(AppSecUserDto dto);
+        Task<LoginResponseDto> GetloginUser(int userId);
+
     }
 }

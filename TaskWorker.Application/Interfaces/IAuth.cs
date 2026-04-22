@@ -9,6 +9,6 @@ namespace TaskWorker.Application.Interfaces
 {
     public interface IAuth
     {
-        Task<LoginResponseDto> AuthenticateAsync(LoginReqquest loginRequest);
+        Task<LoginResponseDto> AuthenticateAsync(LoginReqquest auth);
     }
 }

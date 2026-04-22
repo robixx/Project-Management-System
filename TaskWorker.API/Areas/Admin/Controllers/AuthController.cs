@@ -1,17 +1,126 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskWorker.Application.Interfaces;
+using TaskWorker.Application.ModelViews;
+using TaskWorker.Infrastructure.Utility;
 
 namespace TaskWorker.API.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [ApiController]
     [Route("api/v1/[area]/[controller]")]
+    [ApiController]
+   
     public class AuthController : Controller
     {
-
-        [HttpGet("auth-user")]
-        public IActionResult Login_User()
+        private readonly IAuth _auth;
+        private readonly JwtConfig _jwtConfig;
+        private readonly IUserInfo _userinfo;
+       
+        public AuthController(IAuth auth, JwtConfig jwtConfig, IUserInfo userinfo)
         {
-            return View();
+            _auth = auth;
+            _jwtConfig = jwtConfig;
+            _userinfo = userinfo;
+        }
+
+        [HttpPost("auth-user")]
+        public async Task<IActionResult> Login_User([FromBody] LoginReqquest auth)
+        {
+            if (auth == null)
+            {
+                var json = new
+                {
+                    code = "106",
+                    message = "Endpoint parameter required",
+                    data = ""
+                };
+
+                return BadRequest(json);
+            }
+            var username = auth.loginName;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                var jsonData = new
+                {
+                    code = "108",
+                    message = "Invalid username",
+                    data = new
+                    {
+                        token = ""
+                    }
+                };
+                return Unauthorized(jsonData);
+            }
+
+            try
+            {
+                var password = auth.password;
+
+            }
+            catch (Exception ex)
+            {
+
+                var jsonData = new
+                {
+                    code = "108",
+                    message = "Invalid password during decryption. " + ex.StackTrace,
+                    data = new
+                    {
+                        token = ""
+                    }
+                };
+                return BadRequest(jsonData);
+            }
+
+
+            LoginResponseDto? response = await _auth.AuthenticateAsync(auth);
+            if (response != null && response.UserId > 0)
+            {
+                JwtUser jwt = new()
+                {
+                    UserId = response.UserId,                   
+                    DispalyName = response.DispalyName,
+                    RoleId = response.RoleId,
+                    RoleName = response.RoleName,
+                    TokenExpired = DateTime.Now.AddMinutes(30)
+                };
+
+
+                if (jwt != null)
+                {
+                    string strToken = _jwtConfig.Generate(jwt);
+
+                    var userProfle = await _userinfo.GetloginUser(response.UserId);
+                    var jsonData = new
+                    {
+                        code = "200",
+                        message = "Login Successfull",
+                        data = userProfle,
+                        token = strToken
+                    };
+
+                    return Ok(jsonData);
+                }
+                else
+                {
+                    var jsonData = new
+                    {
+                        code = "108",
+                        message = "Invalid username/password",
+                        token = ""
+                    };
+                    return Unauthorized(jsonData);
+                }
+            }
+            else
+            {
+                var jsonData = new
+                {
+                    code = "108",
+                    message = "Invalid username/password",
+                    token = ""
+                };
+                return Unauthorized(jsonData);
+            }
         }
     }
 }
