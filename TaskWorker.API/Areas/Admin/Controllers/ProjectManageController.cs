@@ -23,8 +23,8 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpGet("get-project-list")]
         public async Task<IActionResult> ProjectList()
         {
-            var (Message, Status, project_list) = await _project.GetProjectListAsync();
-            return Ok(new { Message, Status, project_list });
+            var (Message, Status, data) = await _project.GetProjectListAsync();
+            return Ok(new { Message, Status, data });
         }
 
 
@@ -33,6 +33,13 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
             var (Message, Status) = await _project.CreateProjectAsync(project);
             return Ok(new { Message, Status });
+        }
+
+        [HttpGet("issue-list")]
+        public async Task<IActionResult> IssueList()
+        {
+            var (Message, Status, data) = await _project.GetIssueListAsync();
+            return Ok(new { Message, Status, data });
         }
     }
 }

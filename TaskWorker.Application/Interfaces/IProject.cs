@@ -9,7 +9,9 @@ namespace TaskWorker.Application.Interfaces
 {
     public interface IProject
     {
-        Task<(string Message, bool Status, List<ProjectDto> project_list)> GetProjectListAsync();
+        Task<(string Message, bool Status, List<ProjectDto> data)> GetProjectListAsync();       
         Task<(string Message, bool Status)> CreateProjectAsync(ProjectDto project);
+        Task<(string Message, bool Status, List<IssueDto> data)> GetIssueListAsync();
+
     }
 }

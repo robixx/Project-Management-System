@@ -21,7 +21,7 @@ namespace TaskWorker.Infrastructure.Services
         }
 
        
-        public async Task<(string Message, bool Status, List<ProjectDto> project_list)> GetProjectListAsync()
+        public async Task<(string Message, bool Status, List<ProjectDto> data)> GetProjectListAsync()
         {
             try
             {
@@ -90,5 +90,9 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
+        public async Task<(string Message, bool Status, List<IssueDto> data)> GetIssueListAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
