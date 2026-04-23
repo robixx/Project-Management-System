@@ -25,7 +25,7 @@ namespace TaskWorker.Domain.Entity
 
         public string? ImageName { get; set; }
 
-        public int? IsActive { get; set; } 
+        public int IsActive { get; set; } 
 
         public DateTime? CreatedAt { get; set; } 
     }

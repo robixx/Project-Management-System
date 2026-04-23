@@ -17,6 +17,6 @@ namespace TaskWorker.Application.ModelViews
         public string? HashPassword { get; set; }
         public DateTime? LastLoginDate { get; set; }
         public int? IsActive { get; set; }
-        public int  UnitId { get; set; }
+        
     }
 }

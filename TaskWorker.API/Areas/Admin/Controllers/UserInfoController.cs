@@ -43,5 +43,17 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 message,
             });
         }
+
+        [HttpGet("get-user-list")]
+        public async Task<IActionResult> GetUserList()
+        {
+            var (message, status, data) = await _userinfo.GetUserListAsync();
+            return Ok(new
+            {
+                message,
+                status,
+                data
+            });
+        }
     }
 }

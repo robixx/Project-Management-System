@@ -37,6 +37,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppUserRole> AppUserRole {  get; set; }
         public DbSet<UserRoleDto> UserRoleDto {  get; set; }
         public DbSet<AppDepartmentApproved> AppDepartmentApproved {  get; set; }
+        public DbSet<GetUnitDto> GetUnitDto {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,7 +83,14 @@ namespace TaskWorker.Infrastructure.DBConnection
             // for Procedure
 
             modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();
+           
             modelBuilder.Entity<UserRoleDto>().HasNoKey();
+
+            modelBuilder.Entity<GetUnitDto>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null);
+            });
 
             base.OnModelCreating(modelBuilder);
         }

@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,7 +68,7 @@ namespace TaskWorker.Infrastructure.Services
                     ImageName = fileName,
                     DepartmentId = dto.DepartmentId,
                     DesignationId = dto.DesignationId,
-                    IsActive = dto.IsActive,
+                    IsActive = dto.IsActive??0,
                     CreatedAt = DateTime.Now
                 };
 
@@ -90,6 +92,13 @@ namespace TaskWorker.Infrastructure.Services
                 if (dto == null)
                     return ("User data is empty", false);
 
+                if (dto.UserId == 0)
+                    return ("User Not Selected ", false);
+
+                var userId = await _connection.AppUser.FirstOrDefaultAsync(i => i.UserId == dto.UserId && i.IsActive==1);
+                if (userId == null)
+                    return ("Invalid User", false);
+
                 string msg = string.Empty;
                 AppSecUser? user;
 
@@ -104,7 +113,7 @@ namespace TaskWorker.Infrastructure.Services
 
                     user.UserId = dto.UserId ?? 0;
                     user.LoginName = dto.LoginName;
-                    user.UnitId = dto.UnitId;
+                    user.UnitId = userId.DepartmentId??0;
 
                     if (!string.IsNullOrWhiteSpace(dto.HashPassword))
                     {
@@ -125,7 +134,7 @@ namespace TaskWorker.Infrastructure.Services
                         HashPassword = PasswordHelper.Hash(dto.HashPassword ?? string.Empty),
                         LastLoginDate = DateTime.Now,
                         IsActive = dto.IsActive,
-                        UnitId = dto.UnitId
+                        UnitId = userId.DepartmentId ?? 0,
                     };
 
                     await _connection.AppSecUser.AddAsync(user);
@@ -209,6 +218,25 @@ namespace TaskWorker.Infrastructure.Services
                 throw new Exception($"Error occurred: {ex.Message}");
             }
 
-        } 
+        }
+
+        public async Task<(string Message, bool Status, List<UserRoleDto> Data)> GetUserListAsync()
+        {
+            try
+            {
+                var list = await _connection
+                       .Set<UserRoleDto>()
+                       .FromSqlRaw("SELECT * FROM fn_get_user_details();")
+                       .ToListAsync();
+
+
+                return ("User Retrived Successfully", true, list);
+               
+            }
+            catch (Exception ex)
+            {
+                return ($"Error occurred: {ex.Message}", false, new List<UserRoleDto>());
+            }
+        }
     }
 }

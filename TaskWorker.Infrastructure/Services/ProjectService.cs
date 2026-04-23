@@ -28,8 +28,19 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = Convert.ToInt32(userId);
+
+                var unitlist= await _connection
+                       .Set<GetUnitDto>()
+                       .FromSqlRaw("SELECT * FROM fn_get_departments_by_user({0});", UserId)
+                       .ToListAsync();
+
+                var unitIds = unitlist.Select(x => x.UnitId).ToList();
+
                 var project_list = await _connection.AppProject
-                    .Where(p=>p.Status == 1 && p.Progress==0)
+                    .Where(p=>p.Status == 1 && p.Progress==0 && unitIds.Contains(p.UnitId))
                     .Select(n => new ProjectDto
                     {
                         ProjectId = n.ProjectId,
@@ -37,7 +48,8 @@ namespace TaskWorker.Infrastructure.Services
                         Description = n.Description,
                         CreatedBy = n.CreatedBy,
                         CreatedAt = n.CreatedAt,
-                        Status = n.Status
+                        Status = n.Status,
+                        UnitId=n.UnitId,
                     }).ToListAsync();
 
                 return("Project Retrieved Successfully", true, project_list);
@@ -102,9 +114,22 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = Convert.ToInt32(userId);
+
+                var unitlist = await _connection
+                       .Set<GetUnitDto>()
+                       .FromSqlRaw("SELECT * FROM fn_get_departments_by_user({0});", UserId)
+                       .ToListAsync();
+
+                var unitIds = unitlist.Select(x => x.UnitId).ToList();
+
                 var issue_list = await (from iu in _connection.AppIssue
-                            join pj in _connection.AppProject on iu.ProjectId equals pj.ProjectId
-                            where iu.Status == 1
+                            join pj in _connection.AppProject
+                            .Where(p => unitIds.Contains(p.UnitId))
+                            on iu.ProjectId equals pj.ProjectId 
+                            where iu.Status == 1 
                             select  new IssueDto
                             {
 
