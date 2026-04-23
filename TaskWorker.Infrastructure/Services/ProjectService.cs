@@ -30,7 +30,7 @@ namespace TaskWorker.Infrastructure.Services
             {
                 var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
 
-                int UserId = Convert.ToInt32(userId);
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
 
                 var unitlist= await _connection
                        .Set<GetUnitDto>()
@@ -116,7 +116,7 @@ namespace TaskWorker.Infrastructure.Services
             {
                 var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
 
-                int UserId = Convert.ToInt32(userId);
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
 
                 var unitlist = await _connection
                        .Set<GetUnitDto>()

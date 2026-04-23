@@ -52,27 +52,10 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 return Unauthorized(jsonData);
             }
 
-            try
-            {
-                var password = auth.password;
+            
+             var password = auth.password;
 
-            }
-            catch (Exception ex)
-            {
-
-                var jsonData = new
-                {
-                    code = "108",
-                    message = "Invalid password during decryption. " + ex.StackTrace,
-                    data = new
-                    {
-                        token = ""
-                    }
-                };
-                return BadRequest(jsonData);
-            }
-
-
+            
             LoginResponseDto? response = await _auth.AuthenticateAsync(auth);
             if (response != null && response.UserId > 0)
             {
