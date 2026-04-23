@@ -9,7 +9,7 @@ namespace TaskWorker.Application.ModelViews
     public class LoginResponseDto
     {
        
-        public string? DispalyName { get; set; }
+        public string? DisplayName { get; set; }
         public int? UserId { get; set; }
         public string? RoleName { get; set; }
         public int RoleId { get; set; }

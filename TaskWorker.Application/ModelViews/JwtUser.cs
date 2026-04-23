@@ -10,7 +10,7 @@ namespace TaskWorker.Application.ModelViews
     {
         public string? JWTId { get; set; }
         public int UserId { get; set; }     
-        public string? DispalyName { get; set; }
+        public string? DisplayName { get; set; }
         public string? RoleName { get; set; }
         public int RoleId { get; set; }
         public int UnitId { get; set; }

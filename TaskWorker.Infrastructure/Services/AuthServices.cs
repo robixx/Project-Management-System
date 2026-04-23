@@ -56,7 +56,7 @@ namespace TaskWorker.Infrastructure.Services
 
                 return new LoginResponseDto
                 {
-                    DispalyName = user.LoginName,
+                    DisplayName = user.LoginName,
                     UserId = user.UserId,
                     RoleName = lrole?.RoleName,
                     RoleId = role?.RoleId ?? 0,

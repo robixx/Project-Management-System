@@ -34,7 +34,7 @@ namespace TaskWorker.Infrastructure.Utility
                 var claims = new[] {
                     new Claim(type: "JWTId", jti),
                     new Claim(type: "UserId", value: auth.UserId.ToString() ?? ""),
-                    new Claim(type: "DispalyName",value: auth.DispalyName ?? ""),                   
+                    new Claim(type: "DispalyName",value: auth.DisplayName ?? ""),                   
                     new Claim(type: "RoleName",value: auth.RoleName?.ToString() ?? string.Empty),
                     new Claim(type: "RoleId",value: auth.RoleId.ToString()?? "0"),
                     new Claim(type: "UnitId",value: auth.UnitId.ToString()?? "0"),
@@ -80,7 +80,7 @@ namespace TaskWorker.Infrastructure.Utility
                     UserId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "UserId")?.Value),                   
                     RoleId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "RoleId")?.Value),
                     UnitId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "UnitId")?.Value),
-                    DispalyName = claims.FirstOrDefault(c => c.Type == "DispalyName")?.Value,
+                    DisplayName = claims.FirstOrDefault(c => c.Type == "DisplayName")?.Value,
                     RoleName = claims.FirstOrDefault(c => c.Type == "RoleName")?.Value,
                     TokenExpired = Convert.ToDateTime(claims.FirstOrDefault(c => c.Type == "TokenExpired")?.Value.ToString()),
 

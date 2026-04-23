@@ -79,7 +79,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 JwtUser jwt = new()
                 {
                     UserId = response.UserId??0,                   
-                    DispalyName = response.DispalyName,
+                    DisplayName = response.DisplayName,
                     RoleId = response.RoleId,
                     RoleName = response.RoleName,
                     UnitId = response.UnitId,

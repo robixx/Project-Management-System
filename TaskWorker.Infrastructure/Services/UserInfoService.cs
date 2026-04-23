@@ -199,7 +199,7 @@ namespace TaskWorker.Infrastructure.Services
                     .Select(u => new LoginResponseDto
                     {
                         UserId = u.UserId,
-                        DispalyName = u.UserName,
+                        DisplayName = u.UserName,
                         RoleId = roleid,
                         RoleName = roleName ?? "",
                         UnitId= u.DepartmentId??0,
