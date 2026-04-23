@@ -31,6 +31,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpPost("add-project")]
         public async Task<IActionResult> AddProject([FromBody] ProjectDto project)
         {
+            
             var (Message, Status) = await _project.CreateProjectAsync(project);
             return Ok(new { Message, Status });
         }
@@ -40,6 +41,13 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
             var (Message, Status, data) = await _project.GetIssueListAsync();
             return Ok(new { Message, Status, data });
+        }
+
+        [HttpPost("issue-create")]
+        public async Task<IActionResult> AddIssue([FromBody] IssueDto issue)
+        {
+            var (Message, Status) = await _project.CreateIssueAsync(issue);
+            return Ok(new { Message, Status });
         }
     }
 }

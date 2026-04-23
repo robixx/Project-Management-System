@@ -19,6 +19,7 @@ namespace TaskWorker.Application.ModelViews
         public DateTime? CreatedAt { get; set; }
 
         public int? Status { get; set; }
+        public int UnitId { get; set; }
     }
 }
 

@@ -12,6 +12,7 @@ namespace TaskWorker.Application.Interfaces
         Task<(string Message, bool Status, List<ProjectDto> data)> GetProjectListAsync();       
         Task<(string Message, bool Status)> CreateProjectAsync(ProjectDto project);
         Task<(string Message, bool Status, List<IssueDto> data)> GetIssueListAsync();
+        Task<(string Message, bool Status)> CreateIssueAsync(IssueDto dto);
 
     }
 }

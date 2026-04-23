@@ -13,6 +13,7 @@ namespace TaskWorker.Application.ModelViews
         public string? DispalyName { get; set; }
         public string? RoleName { get; set; }
         public int RoleId { get; set; }
+        public int UnitId { get; set; }
         public DateTime? TokenExpired { get; set; }
     }
 }

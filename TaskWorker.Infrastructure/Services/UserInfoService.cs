@@ -104,6 +104,7 @@ namespace TaskWorker.Infrastructure.Services
 
                     user.UserId = dto.UserId ?? 0;
                     user.LoginName = dto.LoginName;
+                    user.UnitId = dto.UnitId;
 
                     if (!string.IsNullOrWhiteSpace(dto.HashPassword))
                     {
@@ -123,7 +124,8 @@ namespace TaskWorker.Infrastructure.Services
                         LoginName = dto.LoginName,
                         HashPassword = PasswordHelper.Hash(dto.HashPassword ?? string.Empty),
                         LastLoginDate = DateTime.Now,
-                        IsActive = dto.IsActive
+                        IsActive = dto.IsActive,
+                        UnitId = dto.UnitId
                     };
 
                     await _connection.AppSecUser.AddAsync(user);
@@ -190,7 +192,8 @@ namespace TaskWorker.Infrastructure.Services
                         UserId = u.UserId,
                         DispalyName = u.UserName,
                         RoleId = roleid,
-                        RoleName = roleName ?? ""
+                        RoleName = roleName ?? "",
+                        UnitId= u.DepartmentId??0,
                     })
                     .FirstOrDefaultAsync();
 

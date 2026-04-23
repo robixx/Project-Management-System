@@ -30,7 +30,8 @@ namespace TaskWorker.Infrastructure.Services
                     {
                         u.LoginName,
                         u.HashPassword,
-                        u.UserId
+                        u.UserId,
+                        u.UnitId
                     })
                     .FirstOrDefaultAsync();
 
@@ -58,7 +59,8 @@ namespace TaskWorker.Infrastructure.Services
                     DispalyName = user.LoginName,
                     UserId = user.UserId,
                     RoleName = lrole?.RoleName,
-                    RoleId = role?.RoleId ?? 0
+                    RoleId = role?.RoleId ?? 0,
+                    UnitId = user.UnitId
                 };
             }
             catch (Exception ex)

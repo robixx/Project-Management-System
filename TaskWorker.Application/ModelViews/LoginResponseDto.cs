@@ -13,5 +13,6 @@ namespace TaskWorker.Application.ModelViews
         public int? UserId { get; set; }
         public string? RoleName { get; set; }
         public int RoleId { get; set; }
+        public int UnitId { get; set; }
     }
 }

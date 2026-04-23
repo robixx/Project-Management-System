@@ -8,18 +8,14 @@ using System.Threading.Tasks;
 
 namespace TaskWorker.Domain.Entity
 {
-    [Table("app_sec_User")]
-    public class AppSecUser
+    [Table("app_Department_Approved")]
+    public class AppDepartmentApproved
     {
         [Key]
         public int Id { get; set; }
+
         public int UserId { get; set; }
-        [StringLength(250)]
-        public string? LoginName { get; set; }
-        [StringLength(250)]
-        public string? HashPassword { get; set; }
-        public DateTime? LastLoginDate { get; set; }
-        public int? IsActive { get; set; }
-        public int UnitId { get; set; }
+
+        public int DepartmentId { get; set; }
     }
 }

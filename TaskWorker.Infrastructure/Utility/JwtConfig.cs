@@ -37,6 +37,7 @@ namespace TaskWorker.Infrastructure.Utility
                     new Claim(type: "DispalyName",value: auth.DispalyName ?? ""),                   
                     new Claim(type: "RoleName",value: auth.RoleName?.ToString() ?? string.Empty),
                     new Claim(type: "RoleId",value: auth.RoleId.ToString()?? "0"),
+                    new Claim(type: "UnitId",value: auth.UnitId.ToString()?? "0"),
                     new Claim(type: "TokenExpired", value: DateTime.Now.AddMinutes(expirationTime).ToString("yyyy-MM-dd HH:mm:ss")??"")
 
                 };
@@ -78,6 +79,7 @@ namespace TaskWorker.Infrastructure.Utility
                     JWTId = jtiClaim,
                     UserId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "UserId")?.Value),                   
                     RoleId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "RoleId")?.Value),
+                    UnitId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "UnitId")?.Value),
                     DispalyName = claims.FirstOrDefault(c => c.Type == "DispalyName")?.Value,
                     RoleName = claims.FirstOrDefault(c => c.Type == "RoleName")?.Value,
                     TokenExpired = Convert.ToDateTime(claims.FirstOrDefault(c => c.Type == "TokenExpired")?.Value.ToString()),

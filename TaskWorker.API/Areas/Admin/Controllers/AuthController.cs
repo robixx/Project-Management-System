@@ -82,6 +82,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                     DispalyName = response.DispalyName,
                     RoleId = response.RoleId,
                     RoleName = response.RoleName,
+                    UnitId = response.UnitId,
                     TokenExpired = DateTime.Now.AddMinutes(30)
                 };
 

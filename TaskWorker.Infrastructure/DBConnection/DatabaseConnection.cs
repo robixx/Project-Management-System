@@ -36,6 +36,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<RoleWiseMenuDto> RoleWiseMenuDto {  get; set; }
         public DbSet<AppUserRole> AppUserRole {  get; set; }
         public DbSet<UserRoleDto> UserRoleDto {  get; set; }
+        public DbSet<AppDepartmentApproved> AppDepartmentApproved {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,7 +57,26 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppWorkDocument>().HasKey(x => x.Id);
             modelBuilder.Entity<AppEncryptedData>().HasKey(x => x.Id);
             modelBuilder.Entity<AppSecUser>().HasKey(x => x.Id);
-            modelBuilder.Entity<AppUserRole>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserRole>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("app_UserRole");
+
+                entity.HasIndex(e => new { e.UserId, e.RoleId })
+                      .IsUnique();
+
+            });
+
+            modelBuilder.Entity<AppDepartmentApproved>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("app_Department_Approved");
+
+                entity.HasIndex(e => new { e.UserId, e.DepartmentId })
+                      .IsUnique();
+            });
 
 
             // for Procedure
