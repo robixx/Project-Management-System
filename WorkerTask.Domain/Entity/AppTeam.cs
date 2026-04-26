@@ -19,9 +19,8 @@ namespace TaskWorker.Domain.Entity
 
         [MaxLength(200)]
         public string? TeamImage { get; set; } 
-
         public int? CreatedBy { get; set; } 
-
+        public int IsActive { get; set; } 
         public DateTime? CreatedAt { get; set; }
     }
 }
