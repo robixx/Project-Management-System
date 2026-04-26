@@ -17,5 +17,6 @@ namespace TaskWorker.Application.ModelViews
         public int? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public int IsActive { get; set; }
+        public List<TeamMemberDto>? Members { get; set; }
     }
 }

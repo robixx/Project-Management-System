@@ -323,5 +323,26 @@ namespace TaskWorker.Infrastructure.Services
                 return ($"Error: {ex.Message}", false);
             }
         }
+
+        public async Task<List<DropDownDto>> GetTeamListAsync()
+        {
+            try
+            {
+                var data = await _connection.AppTeam
+                    .Where(t => t.IsActive == 1)
+                    .Select(t => new DropDownDto
+                    {
+                        Id = t.TeamId,
+                        Name = t.Name
+                    })
+                    .ToListAsync();
+
+                return data;
+            }
+            catch (Exception)
+            {
+                return new List<DropDownDto>();
+            }
+        }
     }
 }

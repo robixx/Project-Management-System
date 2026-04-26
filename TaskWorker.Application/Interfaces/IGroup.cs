@@ -11,5 +11,6 @@ namespace TaskWorker.Application.Interfaces
     {
         Task<(string Message, bool Status, List<TeamDto> data)> GetGroupListAsync();
         Task<(string Message, bool Status)> AddTeamAsync(TeamDto teamDto);
+        Task<(string Message, bool Status)> AssignTeamMemberAsync(AddGroupMemberDto addGroupMemberDto);
     }
 }
