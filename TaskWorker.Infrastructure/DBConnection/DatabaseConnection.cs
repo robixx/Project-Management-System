@@ -19,7 +19,7 @@ namespace TaskWorker.Infrastructure.DBConnection
 
         // for data table
         public DbSet<AppUser> AppUser {  get; set; }
-        public DbSet<AppGroupTeam> AppGroupTeam {  get; set; }
+        public DbSet<AppGroupMember> AppGroupTeam {  get; set; }
         public DbSet<AppIssue> AppIssue {  get; set; }
         public DbSet<AppMenu> AppMenu {  get; set; }
         public DbSet<AppProject> AppProject {  get; set; }
@@ -46,7 +46,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppUser>().HasKey(x => x.UserId);
             modelBuilder.Entity<AppMetaData>().HasKey(x => x.Id);
             modelBuilder.Entity<AppMetaElement>().HasKey(x => x.ElementId);
-            modelBuilder.Entity<AppGroupTeam>().HasKey(x => x.MemberId);
+            modelBuilder.Entity<AppGroupMember>().HasKey(x => x.MemberId);
             modelBuilder.Entity<AppIssue>().HasKey(x => x.IssueId);
             modelBuilder.Entity<AppMenu>().HasKey(x => x.Id);
             modelBuilder.Entity<AppProject>().HasKey(x => x.ProjectId);

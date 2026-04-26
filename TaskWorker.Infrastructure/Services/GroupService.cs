@@ -46,6 +46,10 @@ namespace TaskWorker.Infrastructure.Services
                 if (!Directory.Exists(uploadPath))
                     Directory.CreateDirectory(uploadPath);
 
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
+
                 // =========================
                 // FILE UPLOAD
                 // =========================
@@ -73,13 +77,13 @@ namespace TaskWorker.Infrastructure.Services
                         return ("Team not found", false);
 
                     team.Name = teamDto.Name;
-                    team.CreatedBy = teamDto.CreatedBy;
-                    team.CreatedAt = DateTime.UtcNow;
+                    team.CreatedBy = UserId;
+                    team.CreatedAt = DateTime.Now;
 
                     if (fileName != null)
                         team.TeamImage = fileName;
 
-                    msg = "Team updated successfully";
+                    msg = $"{teamDto.Name} Team updated successfully";
                 }
                 else
                 {
@@ -88,14 +92,14 @@ namespace TaskWorker.Infrastructure.Services
                     {
                         Name = teamDto.Name,
                         TeamImage = fileName,
-                        CreatedBy = teamDto.CreatedBy,
-                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = UserId,
+                        CreatedAt = DateTime.Now,
                         IsActive = 1
                     };
 
                     await _connection.AppTeam.AddAsync(team);
 
-                    msg = "Team created successfully";
+                    msg = $"{teamDto.Name} Team created successfully";
                 }
 
                 await _connection.SaveChangesAsync();
