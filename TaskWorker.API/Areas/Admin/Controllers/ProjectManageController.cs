@@ -53,8 +53,15 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpGet("get-assign-type-list")]
         public async Task<IActionResult> GetAssignTypeList()
         {
-            var data = await _project.GetAssignTypeListAsync();
-            return Ok(new { Message = "Assign type list retrieved successfully", Status = true, data });
+            var (Message, Status, data) = await _project.GetAssignTypeListAsync();
+            return Ok(new { Message, Status, data });
+        }
+
+        [HttpPost("add-assigntype")]
+        public async Task<IActionResult> AddAssignType([FromBody] AssignTypeDto assignType)
+        {
+            var (Message, Status) = await _project.CreateAssignTypeAsync(assignType);
+            return Ok(new { Message, Status });
         }
     }
 }

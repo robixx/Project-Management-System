@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
+using TaskWorker.Application.Interfaces;
+using TaskWorker.Application.ModelViews;
+
 
 namespace TaskWorker.API.Areas.Admin.Controllers
 {
@@ -11,11 +15,19 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     public class TaskManageController : ControllerBase
     {
 
-        [HttpPost("task-assign")]
-        public async Task<IActionResult> AssignTask()
+        private readonly ITaskboard _task;
+
+        public TaskManageController(ITaskboard task)
         {
-           
-            return Ok();
+            _task = task;
+        }
+
+
+        [HttpPost("task-assign")]
+        public async Task<IActionResult> AssignTask([FromBody] TaskAssignDto assignDto)
+        {
+            var (Message, Status) = await _task.AssignTaskAsync(assignDto);
+            return Ok(new { Message, Status });
         }
     }
 }

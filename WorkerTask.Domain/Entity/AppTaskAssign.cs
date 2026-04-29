@@ -15,7 +15,7 @@ namespace TaskWorker.Domain.Entity
         public int AssignId { get; set; }
 
         [MaxLength(200)]
-        public string? AssignType { get; set; }
+        public int TaskId { get; set; }
 
         public int? AssignTypeId { get; set; }
 

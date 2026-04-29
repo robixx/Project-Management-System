@@ -23,6 +23,7 @@ namespace TaskWorker.Infrastructure.Utility
             services.AddScoped<IUserInfo, UserInfoService>();
             services.AddScoped<IProject, ProjectService>();
             services.AddScoped<IGroup, GroupService>();
+            services.AddScoped<ITaskboard, TaskAssignService>();
         }
     }
 }

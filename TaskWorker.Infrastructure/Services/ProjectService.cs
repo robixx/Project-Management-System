@@ -20,10 +20,10 @@ namespace TaskWorker.Infrastructure.Services
         public ProjectService(DatabaseConnection connection, IHttpContextAccessor httpcontextaccessor)
         {
             _connection = connection;
-            _httpcontextaccessor = httpcontextaccessor; 
+            _httpcontextaccessor = httpcontextaccessor;
         }
 
-       
+
         public async Task<(string Message, bool Status, List<ProjectDto> data)> GetProjectListAsync()
         {
             try
@@ -32,7 +32,7 @@ namespace TaskWorker.Infrastructure.Services
 
                 int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
 
-                var unitlist= await _connection
+                var unitlist = await _connection
                        .Set<GetUnitDto>()
                        .FromSqlRaw("SELECT * FROM fn_get_departments_by_user({0});", UserId)
                        .ToListAsync();
@@ -40,7 +40,7 @@ namespace TaskWorker.Infrastructure.Services
                 var unitIds = unitlist.Select(x => x.UnitId).ToList();
 
                 var project_list = await _connection.AppProject
-                    .Where(p=>p.Status == 1 && p.Progress==0 && unitIds.Contains(p.UnitId))
+                    .Where(p => p.Status == 1 && p.Progress == 0 && unitIds.Contains(p.UnitId))
                     .Select(n => new ProjectDto
                     {
                         ProjectId = n.ProjectId,
@@ -49,10 +49,10 @@ namespace TaskWorker.Infrastructure.Services
                         CreatedBy = n.CreatedBy,
                         CreatedAt = n.CreatedAt,
                         Status = n.Status,
-                        UnitId=n.UnitId,
+                        UnitId = n.UnitId,
                     }).ToListAsync();
 
-                return("Project Retrieved Successfully", true, project_list);
+                return ("Project Retrieved Successfully", true, project_list);
 
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
-                if(project == null)
+                if (project == null)
                 {
                     return ("Project data is null", false);
                 }
@@ -97,16 +97,16 @@ namespace TaskWorker.Infrastructure.Services
                         CreatedBy = Convert.ToInt32(userId),
                         UnitId = unitId != null ? Convert.ToInt32(unitId) : 0
                     };
-                   await _connection.AppProject.AddAsync(newProject);
+                    await _connection.AppProject.AddAsync(newProject);
                 }
 
                 await _connection.SaveChangesAsync();
                 return ("Project saved successfully", true);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-               return($"Error creating project: {ex.Message}", false);
+                return ($"Error creating project: {ex.Message}", false);
             }
         }
 
@@ -126,23 +126,23 @@ namespace TaskWorker.Infrastructure.Services
                 var unitIds = unitlist.Select(x => x.UnitId).ToList();
 
                 var issue_list = await (from iu in _connection.AppIssue
-                            join pj in _connection.AppProject
-                            .Where(p => unitIds.Contains(p.UnitId))
-                            on iu.ProjectId equals pj.ProjectId 
-                            where iu.Status == 1 
-                            select  new IssueDto
-                            {
+                                        join pj in _connection.AppProject
+                                        .Where(p => unitIds.Contains(p.UnitId))
+                                        on iu.ProjectId equals pj.ProjectId
+                                        where iu.Status == 1
+                                        select new IssueDto
+                                        {
 
-                                IssueId = iu.IssueId,
-                                ProjectId = pj.ProjectId,
-                                IssueTitle = iu.IssueTitle,
-                                Description = iu.Description,
-                                ProjectName = pj.ProjectName,
-                                CreatedBy = iu.CreatedBy,
-                                AssignedTo = iu.AssignedTo,
-                                Status = iu.Status,
-                                CreateAt = iu.CreateAt
-                            }).ToListAsync();
+                                            IssueId = iu.IssueId,
+                                            ProjectId = pj.ProjectId,
+                                            IssueTitle = iu.IssueTitle,
+                                            Description = iu.Description,
+                                            ProjectName = pj.ProjectName,
+                                            CreatedBy = iu.CreatedBy,
+                                            AssignedTo = iu.AssignedTo,
+                                            Status = iu.Status,
+                                            CreateAt = iu.CreateAt
+                                        }).ToListAsync();
 
                 return ("Issues retrieved successfully", true, issue_list);
             }
@@ -161,7 +161,7 @@ namespace TaskWorker.Infrastructure.Services
                     return ("Issue data is null", false);
                 }
 
-                string msg= string.Empty;
+                string msg = string.Empty;
 
                 if (dto.IssueId > 0)
                 {
@@ -177,7 +177,7 @@ namespace TaskWorker.Infrastructure.Services
                     existingIssue.AssignedTo = dto.AssignedTo;
                     existingIssue.Status = dto.Status;
                     existingIssue.CreateAt = DateTime.Now;
-                    msg= "Issue updated successfully";
+                    msg = "Issue updated successfully";
                 }
                 else
                 {
@@ -193,9 +193,9 @@ namespace TaskWorker.Infrastructure.Services
                     };
 
                     await _connection.AppIssue.AddAsync(newIssue);
-                    msg= "Issue created successfully";
+                    msg = "Issue created successfully";
                 }
-                 
+
                 await _connection.SaveChangesAsync();
 
                 return (msg, true);
@@ -206,9 +206,73 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
-        public Task<(string Message, bool Status, List<AssignTypeDto> data)> GetAssignTypeListAsync()
+        public async Task<(string Message, bool Status, List<AssignTypeDto> data)> GetAssignTypeListAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var assignTypeList = await _connection.AppAssignType
+                    .Where(a => a.IsActive == 1)
+                    .Select(a => new AssignTypeDto
+                    {
+                        Id = a.Id,
+                        TypeName = a.TypeName,
+                        IsActive = a.IsActive,
+                        CreatedDate = a.CreatedDate
+                    })
+                    .ToListAsync();
+
+                return ("Assign type list retrieved successfully", true, assignTypeList);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error retrieving assign type list: {ex.Message}", false, new List<AssignTypeDto>());
+            }
+        }
+
+        public async Task<(string Message, bool Status)> CreateAssignTypeAsync(AssignTypeDto dto)
+        {
+            try
+            {
+                if (dto == null)
+                {
+                    return ("Assign type data is null", false);
+                }
+                string msg = string.Empty;
+                if (dto.Id > 0)
+                {
+                    var existingAssignType = await _connection.AppAssignType.FindAsync(dto.Id);
+                    if (existingAssignType == null)
+                    {
+                        return ($"Assign type with ID {dto.Id} not found", false);
+                    }
+                    existingAssignType.TypeName = dto.TypeName;
+                    existingAssignType.IsActive = dto.IsActive;
+                    existingAssignType.CreatedDate = DateTime.Now;
+
+                    msg= "Assign type updated successfully";
+                }
+                else
+                {
+                    var newAssignType = new AppAssignType
+                    {
+                        TypeName = dto.TypeName,
+                        IsActive = dto.IsActive,
+                        CreatedDate = DateTime.Now
+                    };
+                    await _connection.AppAssignType.AddAsync(newAssignType);
+
+                    msg= "Assign type created successfully";
+                }
+
+                await _connection.SaveChangesAsync();
+
+                return (msg, true);
+
+            }
+            catch (Exception ex)
+            {
+                return ($"Error creating assign type: {ex.Message}", false);
+            }
         }
     }
 }
