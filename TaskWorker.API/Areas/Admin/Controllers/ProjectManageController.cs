@@ -49,5 +49,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             var (Message, Status) = await _project.CreateIssueAsync(issue);
             return Ok(new { Message, Status });
         }
+
+        [HttpGet("get-assign-type-list")]
+        public async Task<IActionResult> GetAssignTypeList()
+        {
+            var data = await _project.GetAssignTypeListAsync();
+            return Ok(new { Message = "Assign type list retrieved successfully", Status = true, data });
+        }
     }
 }

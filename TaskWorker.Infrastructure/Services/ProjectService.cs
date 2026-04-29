@@ -205,5 +205,10 @@ namespace TaskWorker.Infrastructure.Services
                 return ($"Error creating issue: {ex.Message}", false);
             }
         }
+
+        public Task<(string Message, bool Status, List<AssignTypeDto> data)> GetAssignTypeListAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

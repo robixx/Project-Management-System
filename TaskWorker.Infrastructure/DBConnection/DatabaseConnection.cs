@@ -38,6 +38,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<UserRoleDto> UserRoleDto {  get; set; }
         public DbSet<AppDepartmentApproved> AppDepartmentApproved {  get; set; }
         public DbSet<GetUnitDto> GetUnitDto {  get; set; }
+        public DbSet<AppAssignType> AppAssignType {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +59,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppWorkDocument>().HasKey(x => x.Id);
             modelBuilder.Entity<AppEncryptedData>().HasKey(x => x.Id);
             modelBuilder.Entity<AppSecUser>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppAssignType>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserRole>(entity =>
             {
                 entity.HasKey(e => e.Id);
