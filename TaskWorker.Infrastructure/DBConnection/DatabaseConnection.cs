@@ -39,6 +39,8 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppDepartmentApproved> AppDepartmentApproved {  get; set; }
         public DbSet<GetUnitDto> GetUnitDto {  get; set; }
         public DbSet<AppAssignType> AppAssignType {  get; set; }
+        public DbSet<AppTaskStatus> AppTaskStatus {  get; set; }
+        public DbSet<AppTaskPriority> AppTaskPriority {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +62,8 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppEncryptedData>().HasKey(x => x.Id);
             modelBuilder.Entity<AppSecUser>().HasKey(x => x.Id);
             modelBuilder.Entity<AppAssignType>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppTaskStatus>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppTaskPriority>().HasKey(x => x.PriorityId);
             modelBuilder.Entity<AppUserRole>(entity =>
             {
                 entity.HasKey(e => e.Id);

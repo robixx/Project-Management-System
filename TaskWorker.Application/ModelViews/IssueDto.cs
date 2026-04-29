@@ -12,6 +12,7 @@ namespace TaskWorker.Application.ModelViews
         public int IssueId { get; set; }
 
         public int? ProjectId { get; set; }
+        public int PriorityId { get; set; }
 
         [MaxLength(500)]
         public string? IssueTitle { get; set; }
@@ -19,6 +20,7 @@ namespace TaskWorker.Application.ModelViews
         [MaxLength(500)]
         public string? Description { get; set; }
         public string? ProjectName { get; set; }
+        public string? Priority { get; set; }
 
         public int? CreatedBy { get; set; }
 

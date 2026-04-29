@@ -126,6 +126,7 @@ namespace TaskWorker.Infrastructure.Services
                 var unitIds = unitlist.Select(x => x.UnitId).ToList();
 
                 var issue_list = await (from iu in _connection.AppIssue
+                                        join pr in _connection.AppTaskPriority on iu.PriorityId equals pr.PriorityId
                                         join pj in _connection.AppProject
                                         .Where(p => unitIds.Contains(p.UnitId))
                                         on iu.ProjectId equals pj.ProjectId
@@ -140,6 +141,8 @@ namespace TaskWorker.Infrastructure.Services
                                             ProjectName = pj.ProjectName,
                                             CreatedBy = iu.CreatedBy,
                                             AssignedTo = iu.AssignedTo,
+                                            PriorityId= iu.PriorityId,
+                                            Priority= pr.PriorityName,
                                             Status = iu.Status,
                                             CreateAt = iu.CreateAt
                                         }).ToListAsync();
@@ -171,6 +174,7 @@ namespace TaskWorker.Infrastructure.Services
                         return ($"Issue with ID {dto.IssueId} not found", false);
                     }
                     existingIssue.ProjectId = dto.ProjectId;
+                    existingIssue.PriorityId = dto.PriorityId;
                     existingIssue.IssueTitle = dto.IssueTitle;
                     existingIssue.Description = dto.Description;
                     existingIssue.CreatedBy = dto.CreatedBy;
@@ -185,6 +189,7 @@ namespace TaskWorker.Infrastructure.Services
                     {
                         ProjectId = dto.ProjectId,
                         IssueTitle = dto.IssueTitle,
+                        PriorityId = dto.PriorityId,
                         Description = dto.Description,
                         CreatedBy = dto.CreatedBy,
                         AssignedTo = dto.AssignedTo,

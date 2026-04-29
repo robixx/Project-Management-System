@@ -29,5 +29,13 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             var (Message, Status) = await _task.AssignTaskAsync(assignDto);
             return Ok(new { Message, Status });
         }
+
+
+        [HttpGet("task-list")]
+        public async Task<IActionResult> GetTaskList()
+        {
+            
+            return Ok(new { Message = "Task list retrieved successfully", Status = true, data = new List<object>() });
+        }
     }
 }

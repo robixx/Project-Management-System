@@ -15,6 +15,7 @@ namespace TaskWorker.Domain.Entity
         public int IssueId { get; set; } 
 
         public int? ProjectId { get; set; } 
+        public int PriorityId { get; set; } 
 
         [MaxLength(500)]
         public string? IssueTitle { get; set; } 
