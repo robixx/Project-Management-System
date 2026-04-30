@@ -79,9 +79,56 @@ namespace TaskWorker.Infrastructure.Services
             
         }
 
-        public Task<(string Message, bool Status, List<TaskAssignmentDto> data)> GetTaskAssignmentAsync()
+        public async Task<(string Message, bool Status, List<TaskAssignmentDto> data)> GetTaskAssignmentAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
+
+                var entities = await _connection.TaskAssignment.FromSqlRaw("Select * from public.get_task_assignments({0})", UserId)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                var dataDto = entities.Select(x => new TaskAssignmentDto
+                {
+                    AssignId = x.AssignId,
+                    ProjectId = x.ProjectId,
+                    ProjectName = x.ProjectName,
+                    TaskId = x.TaskId,
+                    IssueTitle = x.IssueTitle,
+                    AssignTypeId = x.AssignTypeId,
+                    TypeName = x.TypeName,
+
+                    AssignedToUser = x.AssignedToUser,
+                    AssignedToTeam = x.AssignedToTeam,
+                    AssignedBy = x.AssignedBy,
+
+                    UserName = x.UserName,
+                    AssignedPerson = x.AssignedPerson,
+                    PersonImage = x.PersonImage,
+
+                    AssignedTeam = x.AssignedTeam,
+                    TeamImage = x.TeamImage,
+
+                    AssignedAt = x.AssignedAt,
+                    Status = x.Status,
+                    Comments = x.Comments,
+
+                    TaskStatus = x.TaskStatus,
+                    PriorityId = x.PriorityId,
+                    PriorityName = x.PriorityName
+
+                }).ToList();
+
+                return ("Data retrieved successfully", true, dataDto);
+
+            }
+            catch (Exception ex)
+            {
+                return ($"Error : {ex.Message}", false, new List<TaskAssignmentDto>());
+            }
         }
     }
 }

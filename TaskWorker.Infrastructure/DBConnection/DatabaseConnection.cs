@@ -41,6 +41,9 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppAssignType> AppAssignType {  get; set; }
         public DbSet<AppTaskStatus> AppTaskStatus {  get; set; }
         public DbSet<AppTaskPriority> AppTaskPriority {  get; set; }
+        public DbSet<TaskAssignment> TaskAssignment {  get; set; }
+        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -64,6 +67,11 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppAssignType>().HasKey(x => x.Id);
             modelBuilder.Entity<AppTaskStatus>().HasKey(x => x.Id);
             modelBuilder.Entity<AppTaskPriority>().HasKey(x => x.PriorityId);
+            modelBuilder.Entity<TaskAssignment>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null);
+            });
             modelBuilder.Entity<AppUserRole>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -85,7 +93,7 @@ namespace TaskWorker.Infrastructure.DBConnection
                       .IsUnique();
             });
 
-
+            
             // for Procedure
 
             modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();

@@ -34,8 +34,10 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpGet("task-list")]
         public async Task<IActionResult> GetTaskList()
         {
-            
-            return Ok(new { Message = "Task list retrieved successfully", Status = true, data = new List<object>() });
+
+            var (Message, Status, data) = await _task.GetTaskAssignmentAsync();
+
+            return Ok(new { Message, Status, data });
         }
     }
 }
