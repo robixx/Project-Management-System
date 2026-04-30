@@ -21,5 +21,6 @@ namespace TaskWorker.Application.Interfaces
         Task<(string Message, bool Status)> RoleWiseUserPermissionAsync(List<UserRoleSetDto> userrole);
 
         Task<List<DropDownDto>> GetTeamListAsync();
+        Task<List<DropDownDto>> GetPriorityListAsync();
     }
 }

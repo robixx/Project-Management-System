@@ -344,5 +344,25 @@ namespace TaskWorker.Infrastructure.Services
                 return new List<DropDownDto>();
             }
         }
+
+        public async Task<List<DropDownDto>> GetPriorityListAsync()
+        {
+            try
+            {
+                var data = await _connection.AppTaskPriority                    
+                    .Select(p => new DropDownDto
+                    {
+                        Id = p.PriorityId,
+                        Name = p.PriorityName
+                    })
+                    .ToListAsync();
+
+                return data;
+            }
+            catch (Exception)
+            {
+                return new List<DropDownDto>();
+            }
+        }
     }
 }

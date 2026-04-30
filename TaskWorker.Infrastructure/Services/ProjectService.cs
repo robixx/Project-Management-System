@@ -10,6 +10,7 @@ using TaskWorker.Application.ModelViews;
 using TaskWorker.Domain.Entity;
 using TaskWorker.Infrastructure.DBConnection;
 
+
 namespace TaskWorker.Infrastructure.Services
 {
     public class ProjectService : IProject
@@ -140,7 +141,7 @@ namespace TaskWorker.Infrastructure.Services
                                             Description = iu.Description,
                                             ProjectName = pj.ProjectName,
                                             CreatedBy = iu.CreatedBy,
-                                            AssignedTo = iu.AssignedTo,
+                                            TaskStatus = iu.TaskStatus,
                                             PriorityId= iu.PriorityId,
                                             Priority= pr.PriorityName,
                                             Status = iu.Status,
@@ -178,7 +179,7 @@ namespace TaskWorker.Infrastructure.Services
                     existingIssue.IssueTitle = dto.IssueTitle;
                     existingIssue.Description = dto.Description;
                     existingIssue.CreatedBy = dto.CreatedBy;
-                    existingIssue.AssignedTo = dto.AssignedTo;
+                    existingIssue.TaskStatus = dto.TaskStatus;
                     existingIssue.Status = dto.Status;
                     existingIssue.CreateAt = DateTime.Now;
                     msg = "Issue updated successfully";
@@ -192,7 +193,7 @@ namespace TaskWorker.Infrastructure.Services
                         PriorityId = dto.PriorityId,
                         Description = dto.Description,
                         CreatedBy = dto.CreatedBy,
-                        AssignedTo = dto.AssignedTo,
+                        TaskStatus = (int)TaskWorker.Infrastructure.Utility.TaskStatus.Pending,
                         Status = dto.Status,
                         CreateAt = DateTime.Now
                     };

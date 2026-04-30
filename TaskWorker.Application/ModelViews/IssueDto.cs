@@ -24,7 +24,7 @@ namespace TaskWorker.Application.ModelViews
 
         public int? CreatedBy { get; set; }
 
-        public int? AssignedTo { get; set; }
+        public int TaskStatus { get; set; }
 
         public int? Status { get; set; }
 

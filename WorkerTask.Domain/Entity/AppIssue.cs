@@ -25,7 +25,7 @@ namespace TaskWorker.Domain.Entity
 
         public int? CreatedBy { get; set; } 
 
-        public int? AssignedTo { get; set; } 
+        public int TaskStatus { get; set; } 
 
         public int? Status { get; set; } 
 

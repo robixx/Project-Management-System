@@ -70,9 +70,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             var (message, status, meta_list) = await _metadata.GetAllDataElementAsync();
             return Ok(new
             {
-                 status,
-                 message,
-                 meta_list
+                status,
+                message,
+                meta_list
             });
         }
 
@@ -118,14 +118,14 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
 
         [HttpPost("role-wise-page-permission")]
-        public async Task<IActionResult> MenuPermission([FromBody] List<MenuPermissionDto>menudata )
+        public async Task<IActionResult> MenuPermission([FromBody] List<MenuPermissionDto> menudata)
         {
             var (status, message) = await _metadata.RoleWiseMenuPermissionAsync(menudata);
             return Ok(new
             {
                 status,
                 message,
-               
+
             });
         }
 
@@ -152,6 +152,14 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 message,
 
             });
+        }
+
+        [HttpGet("priority-list")]
+        public async Task<IActionResult> GetPriorityList()
+        {
+            var data = await _metadata.GetPriorityListAsync();
+            return Ok(data);
+           
         }
     }
 }
