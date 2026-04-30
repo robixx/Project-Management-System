@@ -21,10 +21,8 @@ namespace TaskWorker.Domain.Entity
 
         public int? AssignedToUser { get; set; }
 
-        public int? AssignedToTeam { get; set; }
-
-        [MaxLength(50)]
-        public string? AssignedBy { get; set; }
+        public int? AssignedToTeam { get; set; }      
+        public int AssignedBy { get; set; }
 
         public DateTime? AssignedAt { get; set; }
 

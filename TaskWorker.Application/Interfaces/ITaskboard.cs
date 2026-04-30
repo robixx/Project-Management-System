@@ -10,5 +10,6 @@ namespace TaskWorker.Application.Interfaces
     public interface ITaskboard
     {
         Task<(string Message, bool Status)> AssignTaskAsync(TaskAssignDto assignDto);
+        Task<(string Message, bool Status,List<TaskAssignmentDto> data)> GetTaskAssignmentAsync();
     }
 }

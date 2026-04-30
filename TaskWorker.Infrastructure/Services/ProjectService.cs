@@ -167,6 +167,10 @@ namespace TaskWorker.Infrastructure.Services
 
                 string msg = string.Empty;
 
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
+
                 if (dto.IssueId > 0)
                 {
                     var existingIssue = await _connection.AppIssue.FindAsync(dto.IssueId);
@@ -178,7 +182,7 @@ namespace TaskWorker.Infrastructure.Services
                     existingIssue.PriorityId = dto.PriorityId;
                     existingIssue.IssueTitle = dto.IssueTitle;
                     existingIssue.Description = dto.Description;
-                    existingIssue.CreatedBy = dto.CreatedBy;
+                    existingIssue.CreatedBy = UserId;
                     existingIssue.TaskStatus = dto.TaskStatus;
                     existingIssue.Status = dto.Status;
                     existingIssue.CreateAt = DateTime.Now;
@@ -192,7 +196,7 @@ namespace TaskWorker.Infrastructure.Services
                         IssueTitle = dto.IssueTitle,
                         PriorityId = dto.PriorityId,
                         Description = dto.Description,
-                        CreatedBy = dto.CreatedBy,
+                        CreatedBy = UserId,
                         TaskStatus = (int)TaskWorker.Infrastructure.Utility.TaskStatus.Pending,
                         Status = dto.Status,
                         CreateAt = DateTime.Now

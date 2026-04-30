@@ -42,7 +42,7 @@ namespace TaskWorker.Infrastructure.Services
                 {
                     TaskId = taskAssignDto.TaskId,
                     AssignTypeId = taskAssignDto.AssignTypeId,                    
-                    AssignedBy = userId,
+                    AssignedBy = UserId,
                     AssignedAt = DateTime.Now,
                     Status = 1,
                     Comments = taskAssignDto.Remarks
@@ -77,6 +77,11 @@ namespace TaskWorker.Infrastructure.Services
                 return ($"Error : {ex.Message}", false);
             }
             
+        }
+
+        public Task<(string Message, bool Status, List<TaskAssignmentDto> data)> GetTaskAssignmentAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
