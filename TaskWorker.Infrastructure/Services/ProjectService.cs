@@ -197,7 +197,7 @@ namespace TaskWorker.Infrastructure.Services
                         PriorityId = dto.PriorityId,
                         Description = dto.Description,
                         CreatedBy = UserId,
-                        TaskStatus = (int)TaskWorker.Infrastructure.Utility.TaskStatus.Pending,
+                        TaskStatus = (int)TaskWorker.Infrastructure.Utility.TaskStatusEnum.Pending,
                         Status = dto.Status,
                         CreateAt = DateTime.Now
                     };

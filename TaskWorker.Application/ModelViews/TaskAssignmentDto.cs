@@ -8,7 +8,7 @@ namespace TaskWorker.Application.ModelViews
 {
     public class TaskAssignmentDto
     {
-        public int AssignId { get; set; }
+        public int AssignId { get; set; } 
         public int ProjectId { get; set; }
         public string? ProjectName { get; set; }
         public int TaskId { get; set; }
@@ -26,7 +26,7 @@ namespace TaskWorker.Application.ModelViews
         public DateTime AssignedAt { get; set; }
         public int Status { get; set; }
         public string? Comments { get; set; }
-        public int TaskStatus { get; set; }
+        public string? TaskStatus { get; set; }
         public int PriorityId { get; set; }
         public string? PriorityName { get; set; }
     }

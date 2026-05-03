@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskWorker.Infrastructure.Utility
 {
-    public enum TaskStatus
+    public enum TaskStatusEnum
     {
         Pending = 1,
         InProgress = 2,

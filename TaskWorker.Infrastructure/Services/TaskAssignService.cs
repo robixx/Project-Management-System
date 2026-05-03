@@ -9,6 +9,7 @@ using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 using TaskWorker.Domain.Entity;
 using TaskWorker.Infrastructure.DBConnection;
+using TaskWorker.Infrastructure.Utility;
 
 namespace TaskWorker.Infrastructure.Services
 {
@@ -116,7 +117,13 @@ namespace TaskWorker.Infrastructure.Services
                     Status = x.Status,
                     Comments = x.Comments,
 
-                    TaskStatus = x.TaskStatus,
+                    TaskStatus = ((TaskStatusEnum)x.TaskStatus) switch
+                    {
+                        TaskStatusEnum.Pending => "Pending",
+                        TaskStatusEnum.InProgress => "In Progress",
+                        TaskStatusEnum.Completed => "Completed",
+                        _ => "Unknown"
+                    },
                     PriorityId = x.PriorityId,
                     PriorityName = x.PriorityName
 
