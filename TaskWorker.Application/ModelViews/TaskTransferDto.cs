@@ -9,7 +9,7 @@ namespace TaskWorker.Application.ModelViews
     public class TaskTransferDto
     {
 
-        public int TaskId { get; set; }      
+        public int AssignId { get; set; }      
         public int? FromUserId { get; set; }
         public int? FromTeamId { get; set; }     
         public int? ToUserId { get; set; }

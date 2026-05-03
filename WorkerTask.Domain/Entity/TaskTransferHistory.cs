@@ -26,6 +26,6 @@ namespace TaskWorker.Domain.Entity
         public int? ToTeamId { get; set; }       
         public int TransferredBy { get; set; }       
         public DateTime TransferDate { get; set; } = DateTime.Now;        
-        public string? Comment { get; set; }
+        public string? Comments { get; set; }
     }
 }

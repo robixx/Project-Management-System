@@ -42,6 +42,8 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppTaskStatus> AppTaskStatus {  get; set; }
         public DbSet<AppTaskPriority> AppTaskPriority {  get; set; }
         public DbSet<TaskAssignment> TaskAssignment {  get; set; }
+        public DbSet<TaskTransferHistory> TaskTransferHistory {  get; set; }
+        public DbSet<TaskTransferHistoryViewDto> TaskTransferHistoryViewDto {  get; set; }
         
 
 
@@ -67,10 +69,17 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppAssignType>().HasKey(x => x.Id);
             modelBuilder.Entity<AppTaskStatus>().HasKey(x => x.Id);
             modelBuilder.Entity<AppTaskPriority>().HasKey(x => x.PriorityId);
+            modelBuilder.Entity<TaskTransferHistory>().HasKey(x => x.Id);
             modelBuilder.Entity<TaskAssignment>(entity =>
             {
                 entity.HasNoKey();
                 entity.ToView(null);
+            });
+
+            modelBuilder.Entity<TaskTransferHistoryViewDto>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView("get_task_transfer_history()");
             });
             modelBuilder.Entity<AppUserRole>(entity =>
             {

@@ -138,9 +138,73 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
-        public Task<(string Message, bool Status)> TransferTaskAsync(TaskTransferDto transferDto)
+        
+        public async Task<(string Message, bool Status)> TransferTaskAsync(TaskTransferDto transferDto)
         {
-            throw new NotImplementedException();
+            using var transaction = await _connection.Database.BeginTransactionAsync();
+
+            try
+            {
+                var taskAssign = await _connection.AppTaskAssign
+                    .FirstOrDefaultAsync(x => x.AssignId == transferDto.AssignId);
+
+                if (taskAssign == null)
+                    return ("Task not found", false);
+
+                // Only pending allowed
+                if (taskAssign.Status != 1)
+                    return ("Only pending tasks can be transferred", false);
+
+                // 1. Insert history
+                var history = new TaskTransferHistory
+                {
+                    TaskId = transferDto.AssignId,
+                    FromUserId = taskAssign.AssignedToUser,
+                    FromTeamId = taskAssign.AssignedToTeam,
+                    ToUserId = transferDto.ToUserId,
+                    ToTeamId = transferDto.ToTeamId,
+                    TransferredBy = transferDto.TransferredBy,
+                    TransferDate = DateTime.Now,
+                    Comments = transferDto.Comments
+                };
+
+                await _connection.TaskTransferHistory.AddAsync(history);
+
+                // 2. Update assignment
+                taskAssign.AssignedToUser = transferDto.ToUserId;
+                taskAssign.AssignedToTeam = transferDto.ToTeamId;
+                taskAssign.AssignedBy = transferDto.TransferredBy;
+                taskAssign.AssignedAt = DateTime.Now;
+
+                await _connection.SaveChangesAsync();
+
+                // 3. Commit transaction
+                await transaction.CommitAsync();
+
+                return ("Task transferred successfully", true);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return ($"Error: {ex.Message}", false);
+            }
         }
+
+        public async Task<(string Message, bool Status, List<TaskTransferHistoryViewDto> data)> TaskTransferListAsync()
+        {
+            try
+            {
+                var data = await _connection
+                       .Set<TaskTransferHistoryViewDto>()
+                       .FromSqlRaw("SELECT * FROM get_task_transfer_history();")
+                       .ToListAsync();
+
+                return ("Data Retrive Successfully", true, data);
+            }catch (Exception ex)
+            {
+                return ($"Error : {ex.Message}", false, new List<TaskTransferHistoryViewDto>());
+            }
+        }
+
     }
 }
