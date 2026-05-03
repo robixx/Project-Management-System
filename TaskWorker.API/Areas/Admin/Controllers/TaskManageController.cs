@@ -39,5 +39,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
             return Ok(new { Message, Status, data });
         }
+
+        [HttpPost("task-transfer")]
+        public async Task<IActionResult> TransferTask([FromBody] TaskTransferDto transferDto)
+        {
+            var (Message, Status) = await _task.TransferTaskAsync(transferDto);
+            return Ok(new { Message, Status });
+        }
     }
 }

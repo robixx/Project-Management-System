@@ -12,9 +12,7 @@ namespace TaskWorker.Domain.Entity
     public class AppTaskAssign
     {
         [Key]
-        public int AssignId { get; set; }
-
-        [MaxLength(200)]
+        public int AssignId { get; set; }        
         public int TaskId { get; set; }
 
         public int? AssignTypeId { get; set; }
@@ -28,7 +26,6 @@ namespace TaskWorker.Domain.Entity
 
         public int? Status { get; set; }
 
-        [MaxLength(500)]
         public string? Comments { get; set; } 
     }
 }

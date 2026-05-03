@@ -137,5 +137,10 @@ namespace TaskWorker.Infrastructure.Services
                 return ($"Error : {ex.Message}", false, new List<TaskAssignmentDto>());
             }
         }
+
+        public Task<(string Message, bool Status)> TransferTaskAsync(TaskTransferDto transferDto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
