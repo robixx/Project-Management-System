@@ -206,5 +206,28 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
+        public async Task<(string Message, bool Status)> CloseTaskAsync(int TaskId)
+        {
+
+            try
+            {
+
+                var task= await _connection.AppIssue.FirstOrDefaultAsync(x => x.IssueId == TaskId);
+                if(task == null)
+                {
+                    return ("Task not found", false);
+                }
+                task.Status= 0; 
+
+                await _connection.SaveChangesAsync();
+
+                return ("Task closed successfully", true);
+
+            }
+            catch (Exception ex)
+            {
+                return ($"Error : {ex.Message}", false);
+            }
+        }
     }
 }

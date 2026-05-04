@@ -57,5 +57,13 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             var (Message, Status, data) = await _task.TaskTransferListAsync();
             return Ok(new { Message, Status, data });
         }
+
+
+        [HttpPost("task-close")]
+        public async Task<IActionResult> CloseTask(int TaskId)
+        {
+            var (Message, Status) = await _task.CloseTaskAsync(TaskId);
+            return Ok(new { Message, Status });
+        }
     }
 }

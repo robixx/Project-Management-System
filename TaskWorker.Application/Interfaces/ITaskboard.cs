@@ -13,5 +13,6 @@ namespace TaskWorker.Application.Interfaces
         Task<(string Message, bool Status,List<TaskAssignmentDto> data)> GetTaskAssignmentAsync();
         Task<(string Message, bool Status,List<TaskTransferHistoryViewDto> data)> TaskTransferListAsync();
         Task<(string Message, bool Status)> TransferTaskAsync(TaskTransferDto transferDto);
+        Task<(string Message, bool Status)> CloseTaskAsync(int TaskId);
     }
 }
