@@ -65,5 +65,13 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             var (Message, Status) = await _task.CloseTaskAsync(TaskId);
             return Ok(new { Message, Status });
         }
+
+        [HttpPost("file-upload")]
+        public async Task<IActionResult> Upload([FromForm] FileUploadDto dto)
+        {
+            var (Message, Status) = await _task.UploadFileAsync(dto);
+
+            return Ok(new { Message, Status });
+        }
     }
 }

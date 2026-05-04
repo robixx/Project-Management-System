@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,13 @@ namespace TaskWorker.Infrastructure.Services
     {
         private readonly DatabaseConnection _connection;
         private readonly IHttpContextAccessor _httpcontextaccessor;
+        private readonly IConfiguration _config;
 
-        public TaskAssignService(DatabaseConnection connection,IHttpContextAccessor httpContextAccessor)
+        public TaskAssignService(DatabaseConnection connection,IHttpContextAccessor httpContextAccessor, IConfiguration config)
         {
             _connection = connection;
             _httpcontextaccessor = httpContextAccessor;
+            _config = config;
         }
         public async Task<(string Message, bool Status)> AssignTaskAsync(TaskAssignDto taskAssignDto)
         {
@@ -227,6 +230,70 @@ namespace TaskWorker.Infrastructure.Services
             catch (Exception ex)
             {
                 return ($"Error : {ex.Message}", false);
+            }
+        }
+
+        public async Task<(string Message, bool Status)> UploadFileAsync(FileUploadDto dto)
+        {
+            try
+            {
+                if (dto.File == null || dto.File.Length == 0)
+                    return ("File is empty", false);
+
+                string basePath = _config["FileStorage:UserImagePath"] ?? "D:\\TaskWorker";
+
+                var folderName = dto.RefType.ToString();
+                var uploadPath = Path.Combine(basePath, folderName);
+
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                var fileNameOnly = dto.File.FileName;
+
+                // 🔥 DUPLICATE CHECK (IMPORTANT)
+                var isDuplicate = await _connection.AppFileUpload
+                    .AnyAsync(x =>
+                        x.RefId == dto.RefId &&
+                        x.RefType == (int)dto.RefType &&
+                        x.FileName == fileNameOnly);
+
+                if (isDuplicate)
+                    return ("Duplicate file not allowed", false);
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(dto.File.FileName);
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
+
+                // Save file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.File.CopyToAsync(stream);
+                }
+
+                var relativePath = $"{folderName}/{fileName}";
+
+                var fileEntity = new AppFileUpload
+                {
+                    RefId = dto.RefId,
+                    RefType = (int)dto.RefType,
+                    FileName = dto.File.FileName,
+                    FileType = dto.File.ContentType,
+                    UploadedBy = UserId,
+                    UploadedAt = DateTime.Now,
+                    Status = 1
+                };
+
+                await _connection.AppFileUpload.AddAsync(fileEntity);
+                await _connection.SaveChangesAsync();
+
+                return ("File uploaded successfully", true);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false);
             }
         }
     }
