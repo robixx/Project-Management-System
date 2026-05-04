@@ -73,5 +73,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
             return Ok(new { Message, Status });
         }
+
+        [HttpPost("issue-review")]
+        public async Task<IActionResult> IssueReview([FromBody] IssueReviewDto dto)
+        {
+            var (Message, Status) = await _task.AddIssueReviewAsync(dto);
+            return Ok(new { Message, Status });
+        }
     }
 }

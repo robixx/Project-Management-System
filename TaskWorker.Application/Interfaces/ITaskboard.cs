@@ -15,5 +15,6 @@ namespace TaskWorker.Application.Interfaces
         Task<(string Message, bool Status)> TransferTaskAsync(TaskTransferDto transferDto);
         Task<(string Message, bool Status)> CloseTaskAsync(int TaskId);
         Task<(string Message, bool Status)> UploadFileAsync(FileUploadDto dto);
+        Task<(string Message, bool Status)> AddIssueReviewAsync(IssueReviewDto dto);
     }
 }

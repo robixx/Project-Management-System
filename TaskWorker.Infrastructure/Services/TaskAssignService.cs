@@ -296,5 +296,38 @@ namespace TaskWorker.Infrastructure.Services
                 return ($"Error: {ex.Message}", false);
             }
         }
+
+        public async Task<(string Message, bool Status)> AddIssueReviewAsync(IssueReviewDto dto)
+        {
+            try
+            {
+                if(dto == null)
+                {
+                    return ("Error: IssueReviewDto is null", false);
+                }
+
+                var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
+                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
+
+                var issueReview = new AppIssueReview
+                {
+                    IssueId = dto.IssueId,
+                    Comment = dto.Comment,
+                    UserId = UserId, 
+                    CreatedAt = DateTime.Now,
+                    Status=1
+                };
+
+                await _connection.AppIssueReview.AddAsync(issueReview);
+                await _connection.SaveChangesAsync();
+
+                return ("Issue review added successfully", true);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false);
+            }
+        }
     }
 }

@@ -45,6 +45,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<TaskTransferHistory> TaskTransferHistory {  get; set; }
         public DbSet<TaskTransferHistoryViewDto> TaskTransferHistoryViewDto {  get; set; }
         public DbSet<AppFileUpload> AppFileUpload {  get; set; }
+        public DbSet<AppIssueReview> AppIssueReview {  get; set; }
         
 
 
@@ -72,6 +73,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppTaskPriority>().HasKey(x => x.PriorityId);
             modelBuilder.Entity<TaskTransferHistory>().HasKey(x => x.Id);
             modelBuilder.Entity<AppFileUpload>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppIssueReview>().HasKey(x => x.Id);
             modelBuilder.Entity<TaskAssignment>(entity =>
             {
                 entity.HasNoKey();
