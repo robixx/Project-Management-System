@@ -11,8 +11,9 @@ namespace TaskWorker.Domain.Entity
     public class AppIssueReview
     {
         public int Id { get; set; }
-
-        public int IssueId { get; set; }
+        public int RefId { get; set; }   
+  // 1 = Project, 2 = Issue
+        public int RefType { get; set; }      
 
         public int UserId { get; set; }
 

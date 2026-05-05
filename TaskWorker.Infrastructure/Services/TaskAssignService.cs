@@ -301,28 +301,24 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
-                if(dto == null)
-                {
-                    return ("Error: IssueReviewDto is null", false);
-                }
-
                 var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
 
-                int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
+                int UserId = int.TryParse(userId, out int uid) ? uid : 0;
 
-                var issueReview = new AppIssueReview
+                var review = new AppIssueReview
                 {
-                    IssueId = dto.IssueId,
+                    RefId = dto.RefId,
+                    RefType = (int)dto.RefType,
+                    UserId = UserId,
                     Comment = dto.Comment,
-                    UserId = UserId, 
                     CreatedAt = DateTime.Now,
-                    Status=1
+                    Status = 1
                 };
 
-                await _connection.AppIssueReview.AddAsync(issueReview);
+                await _connection.AppIssueReview.AddAsync(review);
                 await _connection.SaveChangesAsync();
 
-                return ("Issue review added successfully", true);
+                return ("Review added successfully", true);
             }
             catch (Exception ex)
             {

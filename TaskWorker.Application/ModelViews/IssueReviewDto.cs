@@ -8,7 +8,8 @@ namespace TaskWorker.Application.ModelViews
 {
     public class IssueReviewDto
     {
-        public int IssueId { get; set; }
+        public int RefId { get; set; }
+        public UploadRefType RefType { get; set; }
         public string? Comment { get; set; }
     }
 }
