@@ -15,8 +15,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         {
 
         }
-
-
+        
         // for data table
         public DbSet<AppUser> AppUser {  get; set; }
         public DbSet<AppGroupMember> AppGroupTeam {  get; set; }
@@ -74,6 +73,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<TaskTransferHistory>().HasKey(x => x.Id);
             modelBuilder.Entity<AppFileUpload>().HasKey(x => x.Id);
             modelBuilder.Entity<AppIssueReview>().HasKey(x => x.Id);
+
             modelBuilder.Entity<TaskAssignment>(entity =>
             {
                 entity.HasNoKey();

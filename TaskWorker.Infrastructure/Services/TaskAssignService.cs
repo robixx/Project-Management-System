@@ -316,6 +316,7 @@ namespace TaskWorker.Infrastructure.Services
                 };
 
                 await _connection.AppIssueReview.AddAsync(review);
+
                 await _connection.SaveChangesAsync();
 
                 return ("Review added successfully", true);

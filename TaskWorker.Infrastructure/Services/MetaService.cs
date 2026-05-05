@@ -20,7 +20,7 @@ namespace TaskWorker.Infrastructure.Services
             _connection = connection;
         }
 
-        public async Task<(string Message, bool Status, List<DataElementDto> meta_list)> GetAllDataElementAsync()
+        public async Task<(string Message, bool Status, List<DataElementDto> data)> GetAllDataElementAsync()
         {
             try
             {
@@ -127,7 +127,7 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
-        public async Task<(string Message, bool Status, List<RoleDto> role_list)> GetRoleListAsync()
+        public async Task<(string Message, bool Status, List<RoleDto> data)> GetRoleListAsync()
         {
             try
             {
@@ -196,7 +196,7 @@ namespace TaskWorker.Infrastructure.Services
             }
         }
 
-        public async Task<(string Message, bool Status, List<RoleWiseMenuDto> menu_list)> RoleWiseMenuListAsync(int roleid)
+        public async Task<(string Message, bool Status, List<RoleWiseMenuDto> data)> RoleWiseMenuListAsync(int roleid)
         {
             try
             {
@@ -257,7 +257,7 @@ namespace TaskWorker.Infrastructure.Services
         }
 
 
-        public async Task<(string Message, bool Status, List<UserRoleDto> user_role_list)> GetUserRoleListAsync()
+        public async Task<(string Message, bool Status, List<UserRoleDto> data)> GetUserRoleListAsync()
         {
             try
             {
