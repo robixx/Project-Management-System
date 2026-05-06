@@ -5,10 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace TaskWorker.API.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("api/v1/[area]/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class FileShareController : ControllerBase
     {
+
+
+        [HttpPost("file-share")]
+        public async Task<IActionResult> ShareFile()
+        {
+            
+            return Ok(new { Message = "File shared successfully", Status = true });
+        }
     }
 }

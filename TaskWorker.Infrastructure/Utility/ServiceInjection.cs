@@ -24,6 +24,7 @@ namespace TaskWorker.Infrastructure.Utility
             services.AddScoped<IProject, ProjectService>();
             services.AddScoped<IGroup, GroupService>();
             services.AddScoped<ITaskboard, TaskAssignService>();
+            services.AddScoped<IDocShare, DocShareService>();
         }
     }
 }
