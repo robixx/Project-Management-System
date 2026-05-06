@@ -9,12 +9,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class ProjectManageController : Controller
+    public class projectmanageController : Controller
     {
 
         private readonly IProject _project;
 
-        public ProjectManageController(IProject project)
+        public projectmanageController(IProject project)
         {
             _project = project;
         }

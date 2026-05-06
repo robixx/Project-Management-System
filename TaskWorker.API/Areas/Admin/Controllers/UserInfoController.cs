@@ -11,12 +11,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserInfoController : ControllerBase
+    public class userinfoController : ControllerBase
     {
 
         private readonly IUserInfo _userinfo;
 
-        public UserInfoController(IUserInfo userinfo)
+        public userinfoController(IUserInfo userinfo)
         {
             _userinfo = userinfo;
         }

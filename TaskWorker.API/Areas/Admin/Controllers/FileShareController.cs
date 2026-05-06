@@ -8,7 +8,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class FileShareController : ControllerBase
+    public class fileshareController : ControllerBase
     {
 
 

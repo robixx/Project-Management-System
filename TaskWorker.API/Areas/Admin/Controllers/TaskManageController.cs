@@ -13,12 +13,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [ApiController]
     [Authorize]
 
-    public class TaskManageController : ControllerBase
+    public class taskmanageController : ControllerBase
     {
 
         private readonly ITaskboard _task;
 
-        public TaskManageController(ITaskboard task)
+        public taskmanageController(ITaskboard task)
         {
             _task = task;
         }

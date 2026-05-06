@@ -10,13 +10,13 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthController : Controller
+    public class authController : Controller
     {
         private readonly IAuth _auth;
         private readonly JwtConfig _jwtconfig;
         private readonly IUserInfo _userinfo;
        
-        public AuthController(IAuth auth, JwtConfig jwtConfig, IUserInfo userinfo)
+        public authController(IAuth auth, JwtConfig jwtConfig, IUserInfo userinfo)
         {
             _auth = auth;
             _jwtconfig = jwtConfig;

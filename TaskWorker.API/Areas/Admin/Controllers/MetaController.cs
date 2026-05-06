@@ -12,12 +12,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class MetaController : ControllerBase
+    public class metaController : ControllerBase
     {
 
         private readonly IBaseData _metadata;
 
-        public MetaController(IBaseData metadata)
+        public metaController(IBaseData metadata)
         {
             _metadata = metadata;
         }

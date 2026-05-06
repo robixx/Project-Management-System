@@ -10,12 +10,12 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class GroupManageController : ControllerBase
+    public class groupmanageController : ControllerBase
     {
         private readonly IGroup _group;
         private readonly IBaseData _baseData;
 
-        public GroupManageController(IGroup group, IBaseData baseData)
+        public groupmanageController(IGroup group, IBaseData baseData)
         {
             _group = group;
             _baseData = baseData;
