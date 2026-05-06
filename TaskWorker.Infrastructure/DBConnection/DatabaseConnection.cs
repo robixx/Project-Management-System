@@ -45,6 +45,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<TaskTransferHistoryViewDto> TaskTransferHistoryViewDto {  get; set; }
         public DbSet<AppFileUpload> AppFileUpload {  get; set; }
         public DbSet<AppIssueReview> AppIssueReview {  get; set; }
+        public DbSet<AppFileShare> AppFileShare {  get; set; }
         
 
 
@@ -80,6 +81,9 @@ namespace TaskWorker.Infrastructure.DBConnection
                 entity.ToView(null);
             });
 
+            modelBuilder.Entity<AppFileShare>()
+                .HasIndex(x => new { x.FileId, x.UserId })
+                .IsUnique();
             modelBuilder.Entity<TaskTransferHistoryViewDto>(entity =>
             {
                 entity.HasNoKey();
