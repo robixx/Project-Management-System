@@ -15,6 +15,7 @@ namespace TaskWorker.Application.Interfaces
         Task<(string Message, bool Status, List<AssignTypeDto> data)> GetAssignTypeListAsync();
         Task<(string Message, bool Status)> CreateIssueAsync(IssueDto dto);
         Task<(string Message, bool Status)> CreateAssignTypeAsync(AssignTypeDto dto);
-
+        Task<(string Message, bool Status, List<WbsDto> data)> GetWbsListAsync(int projectId);
+        Task<(string Message, bool Status)> CreateWbsAsync(WbsDto wbs);
     }
 }

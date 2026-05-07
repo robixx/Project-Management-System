@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using TaskWorker.Infrastructure.DBConnection;
+using TaskWorker.Infrastructure.Middleware;
 using TaskWorker.Infrastructure.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,6 +86,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.InjectService();
 builder.Services.AddControllers();
+
+// Add SignalR services
+builder.Services.AddSignalR();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -116,5 +121,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Map SignalR hubs
+app.MapHub<ProjectHub>("/projectHub");
+
+// Add SignalR Middleware
+app.UseMiddleware<CustomMiddleware>();
 
 app.Run();

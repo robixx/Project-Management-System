@@ -9,7 +9,9 @@ using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 using TaskWorker.Domain.Entity;
 using TaskWorker.Infrastructure.DBConnection;
+using Microsoft.AspNetCore.SignalR;
 
+using TaskWorker.Infrastructure.Utility;
 
 namespace TaskWorker.Infrastructure.Services
 {
@@ -17,13 +19,14 @@ namespace TaskWorker.Infrastructure.Services
     {
         private readonly DatabaseConnection _connection;
         private readonly IHttpContextAccessor _httpcontextaccessor;
+        private readonly HubService _hubService;
 
-        public ProjectService(DatabaseConnection connection, IHttpContextAccessor httpcontextaccessor)
+        public ProjectService(DatabaseConnection connection, IHttpContextAccessor httpcontextaccessor, HubService hubService)
         {
             _connection = connection;
             _httpcontextaccessor = httpcontextaccessor;
+            _hubService = hubService;
         }
-
 
         public async Task<(string Message, bool Status, List<ProjectDto> data)> GetProjectListAsync()
         {
@@ -102,6 +105,8 @@ namespace TaskWorker.Infrastructure.Services
                 }
 
                 await _connection.SaveChangesAsync();
+                await _hubService.NotifyProjectUpdate("A new project has been created.");
+
                 return ("Project saved successfully", true);
 
             }
@@ -207,6 +212,7 @@ namespace TaskWorker.Infrastructure.Services
                 }
 
                 await _connection.SaveChangesAsync();
+                await _hubService.NotifyIssueAssignment("A new issue has been assigned.");
 
                 return (msg, true);
             }
@@ -283,6 +289,92 @@ namespace TaskWorker.Infrastructure.Services
             {
                 return ($"Error creating assign type: {ex.Message}", false);
             }
+        }
+
+        public async Task<(string Message, bool Status, List<WbsDto> data)> GetWbsListAsync(int projectId)
+        {
+            try
+            {
+                var wbsList = await _connection.AppWbs
+                    .Where(w => w.ProjectId == projectId && w.Status == 1)
+                    .Select(w => new WbsDto
+                    {
+                        WbsId = w.WbsId,
+                        WbsName = w.WbsName,
+                        Description = w.Description,
+                        ProjectId = w.ProjectId,
+                        CreatedBy = w.CreatedBy,
+                        CreatedAt = w.CreatedAt,
+                        Status = w.Status
+                    })
+                    .ToListAsync();
+
+                return ("WBS list retrieved successfully", true, wbsList);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error retrieving WBS list: {ex.Message}", false, new List<WbsDto>());
+            }
+        }
+
+        public async Task<(string Message, bool Status)> CreateWbsAsync(WbsDto wbs)
+        {
+            try
+            {
+                if (wbs == null)
+                {
+                    return ("WBS data is null", false);
+                }
+
+                var newWbs = new AppWbs
+                {
+                    WbsName = wbs.WbsName,
+                    Description = wbs.Description,
+                    ProjectId = wbs.ProjectId,
+                    CreatedBy = wbs.CreatedBy,
+                    CreatedAt = DateTime.Now,
+                    Status = wbs.Status
+                };
+
+                await _connection.AppWbs.AddAsync(newWbs);
+                await _connection.SaveChangesAsync();
+
+                return ("WBS created successfully", true);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error creating WBS: {ex.Message}", false);
+            }
+        }
+
+        public async Task<(string Message, bool Status)> ReviewProjectAsync(int projectId)
+        {
+            var result = ("Project reviewed successfully", true);
+            if (result.Item2)
+            {
+                await _hubService.NotifyReview("A project has been reviewed.");
+            }
+            return result;
+        }
+
+        public async Task<(string Message, bool Status)> TransferProjectAsync(int projectId)
+        {
+            var result = ("Project transferred successfully", true);
+            if (result.Item2)
+            {
+                await _hubService.NotifyTransfer("A project has been transferred.");
+            }
+            return result;
+        }
+
+        public async Task<(string Message, bool Status)> CloseProjectAsync(int projectId)
+        {
+            var result = ("Project closed successfully", true);
+            if (result.Item2)
+            {
+                await _hubService.NotifyClose("A project has been closed.");
+            }
+            return result;
         }
     }
 }

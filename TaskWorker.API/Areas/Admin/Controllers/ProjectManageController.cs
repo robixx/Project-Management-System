@@ -63,5 +63,19 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             var (Message, Status) = await _project.CreateAssignTypeAsync(assignType);
             return Ok(new { Message, Status });
         }
+
+        [HttpGet("get-wbs-list/{projectId}")]
+        public async Task<IActionResult> GetWbsList(int projectId)
+        {
+            var (Message, Status, data) = await _project.GetWbsListAsync(projectId);
+            return Ok(new { Message, Status, data });
+        }
+
+        [HttpPost("add-wbs")]
+        public async Task<IActionResult> AddWbs([FromBody] WbsDto wbs)
+        {
+            var (Message, Status) = await _project.CreateWbsAsync(wbs);
+            return Ok(new { Message, Status });
+        }
     }
 }

@@ -9,7 +9,7 @@ using TaskWorker.Domain.Entity;
 
 namespace TaskWorker.Infrastructure.DBConnection
 {
-    public class DatabaseConnection: DbContext
+    public class DatabaseConnection : DbContext
     {
         public  DatabaseConnection(DbContextOptions<DatabaseConnection> options) : base(options)
         {
@@ -46,7 +46,8 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppFileUpload> AppFileUpload {  get; set; }
         public DbSet<AppIssueReview> AppIssueReview {  get; set; }
         public DbSet<AppFileShare> AppFileShare {  get; set; }
-        
+        public DbSet<AppWbs> AppWbs { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,6 +75,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<TaskTransferHistory>().HasKey(x => x.Id);
             modelBuilder.Entity<AppFileUpload>().HasKey(x => x.Id);
             modelBuilder.Entity<AppIssueReview>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppWbs>().HasKey(x => x.WbsId);
 
             modelBuilder.Entity<TaskAssignment>(entity =>
             {
@@ -108,9 +110,7 @@ namespace TaskWorker.Infrastructure.DBConnection
 
                 entity.HasIndex(e => new { e.UserId, e.DepartmentId })
                       .IsUnique();
-            });
-
-            
+            });            
             // for Procedure
 
             modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();
