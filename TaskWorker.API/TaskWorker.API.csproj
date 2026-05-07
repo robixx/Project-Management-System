@@ -31,4 +31,8 @@
     <ProjectReference Include="..\TaskWorker.Infrastructure\TaskWorker.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
