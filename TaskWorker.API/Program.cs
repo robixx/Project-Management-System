@@ -8,47 +8,60 @@ using TaskWorker.Infrastructure.Middleware;
 using TaskWorker.Infrastructure.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+// DB
 builder.Services.AddDbContext<DatabaseConnection>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
-
-// Add services to the container.
+// JWT AUTH
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+.AddJwtBearer(options =>
+{
+    var jwtKey = builder.Configuration["Jwt:Key"]
+        ?? throw new InvalidOperationException("JWT Key is missing");
+
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        var jwtKey = builder.Configuration["Jwt:Key"]
-                    ?? throw new InvalidOperationException("JWT Key is missing in configuration.");
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-        };
-    });
-// Add authorization services
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+
+// AUTH
 builder.Services.AddAuthorization();
+
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-            "http://localhost:5173",    // Vite dev server
-            "http://192.168.0.102:5173" // optional if accessing via LAN IP
+            "http://localhost:5173",
+            "http://192.168.0.102:5173"
         )
-          .AllowAnyHeader()
-          .AllowAnyMethod()
-          .AllowCredentials()
-          .WithExposedHeaders("Content-Disposition");
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .WithExposedHeaders("Content-Disposition");
     });
 });
 
-// Swagger with JWT
+// CONTROLLERS
+builder.Services.AddControllers();
+
+// SIGNALR
+builder.Services.AddSignalR();
+
+// SWAGGER
+builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -57,15 +70,13 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    // JWT Bearer token support
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Enter JWT Bearer token **only**",
+        Description = "JWT Authorization header using the Bearer scheme",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT"
+        Scheme = "bearer"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -79,23 +90,16 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            new string[] {}
         }
     });
-
 });
+
 builder.Services.InjectService();
-builder.Services.AddControllers();
-
-// Add SignalR services
-builder.Services.AddSignalR();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-// Configure the HTTP request pipeline.
+
+// ERROR HANDLING
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -105,27 +109,34 @@ else
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
-app.UseRouting();
-app.UseStaticFiles();
+
+// PIPELINE ORDER (IMPORTANT FIX)
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+// CUSTOM MIDDLEWARE
+app.UseMiddleware<CustomMiddleware>();
+
+// SWAGGER
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskWorker System API V1");
-    c.RoutePrefix = "swagger"; // Access at https://<host>/swagger
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskWorker API V1");
+    c.RoutePrefix = "swagger";
 });
-app.UseCors("AllowFrontend");
 
-// Authentication middleware must come before Authorization
-app.UseAuthentication();
-app.UseAuthorization();
-
+// ENDPOINTS
 app.MapControllers();
 
-// Map SignalR hubs
 app.MapHub<ProjectHub>("/projectHub");
-
-// Add SignalR Middleware
-app.UseMiddleware<CustomMiddleware>();
 
 app.Run();

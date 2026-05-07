@@ -15,7 +15,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         private readonly IAuth _auth;
         private readonly JwtConfig _jwtconfig;
         private readonly IUserInfo _userinfo;
-       
+
         public authController(IAuth auth, JwtConfig jwtConfig, IUserInfo userinfo)
         {
             _auth = auth;
@@ -28,83 +28,79 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
             if (auth == null)
             {
-                var json = new
+                var response = new ApiResponse<object>
                 {
-                    code = "106",
-                    message = "Endpoint parameter required",
-                    data = ""
+                    Code = "106",
+                    Message = "Endpoint parameter required",
+                    Data = null,
+                    Token = string.Empty
                 };
 
-                return BadRequest(json);
+                return BadRequest(response);
             }
+
             var username = auth.loginName;
             if (string.IsNullOrWhiteSpace(username))
             {
-                var jsonData = new
+                var response = new ApiResponse<object>
                 {
-                    code = "108",
-                    message = "Invalid username",
-                    data = new
-                    {
-                        token = ""
-                    }
+                    Code = "108",
+                    Message = "Invalid username",
+                    Data = null,
+                    Token = string.Empty
                 };
-                return Unauthorized(jsonData);
+                return Unauthorized(response);
             }
 
-            
-             var password = auth.password;
-
-            
-            LoginResponseDto? response = await _auth.AuthenticateAsync(auth);
-            if (response != null && response.UserId > 0)
+            try
             {
-                JwtUser jwt = new()
+                LoginResponseDto? response = await _auth.AuthenticateAsync(auth);
+                if (response != null && response.UserId > 0)
                 {
-                    UserId = response.UserId??0,                   
-                    DisplayName = response.DisplayName,
-                    RoleId = response.RoleId,
-                    RoleName = response.RoleName,
-                    UnitId = response.UnitId,
-                    TokenExpired = DateTime.Now.AddMinutes(30)
-                };
+                    JwtUser jwt = new()
+                    {
+                        UserId = response.UserId ?? 0,
+                        DisplayName = response.DisplayName,
+                        RoleId = response.RoleId,
+                        RoleName = response.RoleName,
+                        UnitId = response.UnitId,
+                        TokenExpired = DateTime.Now.AddMinutes(30)
+                    };
 
-
-                if (jwt != null)
-                {
                     string strToken = _jwtconfig.Generate(jwt);
 
-                    var userProfle = await _userinfo.GetloginUser(response.UserId??0);
-                    var jsonData = new
+                    var userProfle = await _userinfo.GetloginUser(response.UserId ?? 0);
+
+                    var successResponse = new ApiResponse<object>
                     {
-                        code = "200",
-                        message = "Login Successfull",
-                        data = userProfle,
-                        token = strToken
+                        Code = "200",
+                        Message = "Login Successful",
+                        Data = userProfle,
+                        Token = strToken
                     };
 
-                    return Ok(jsonData);
+                    return Ok(successResponse);
                 }
-                else
+
+                var failResponse = new ApiResponse<object>
                 {
-                    var jsonData = new
-                    {
-                        code = "108",
-                        message = "Invalid username/password",
-                        token = ""
-                    };
-                    return Unauthorized(jsonData);
-                }
-            }
-            else
-            {
-                var jsonData = new
-                {
-                    code = "108",
-                    message = "Invalid username/password",
-                    token = ""
+                    Code = "108",
+                    Message = "Invalid username/password",
+                    Data = null,
+                    Token = string.Empty
                 };
-                return Unauthorized(jsonData);
+                return Unauthorized(failResponse);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ApiResponse<object>
+                {
+                    Code = "500",
+                    Message = "An error occurred: " + ex.Message,
+                    Data = null,
+                    Token = string.Empty
+                };
+                return StatusCode(500, errorResponse);
             }
         }
     }
