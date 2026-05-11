@@ -47,6 +47,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppIssueReview> AppIssueReview {  get; set; }
         public DbSet<AppFileShare> AppFileShare {  get; set; }
         public DbSet<AppWbs> AppWbs { get; set; }
+        public DbSet<CalendarDto> CalendarDto { get; set; }
 
 
 
@@ -76,6 +77,7 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppFileUpload>().HasKey(x => x.Id);
             modelBuilder.Entity<AppIssueReview>().HasKey(x => x.Id);
             modelBuilder.Entity<AppWbs>().HasKey(x => x.WbsId);
+            modelBuilder.Entity<CalendarDto>().HasNoKey();
 
             modelBuilder.Entity<TaskAssignment>(entity =>
             {

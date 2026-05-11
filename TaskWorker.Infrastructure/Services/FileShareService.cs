@@ -82,11 +82,33 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
-                var start = DateTime.ParseExact( StartDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string[] formats = new[]
+                             {
+                                "dd-MM-yyyy",
+                                "dd/MM/yyyy",
+                                "yyyy-MM-dd"
+                            };
 
-                var end = DateTime.ParseExact(ToDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                DateTime start = DateTime.ParseExact(
+                    StartDate,
+                    formats,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None
+                );
 
-                return ("Data Retrived Successfully", true, new List<CalendarDto>());
+                DateTime end = DateTime.ParseExact(
+                    ToDate,
+                    formats,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None
+                );
+
+                var data = await _connection.Set<CalendarDto>()
+                    .FromSqlRaw(@"SELECT * FROM public.""fn_GetCalendarData""({0}::date, {1}::date)",start,end)
+                    .ToListAsync();
+
+
+                return ("Data Retrived Successfully", true, data);
             }
             catch (Exception ex)
             {

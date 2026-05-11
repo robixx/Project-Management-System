@@ -15,4 +15,5 @@ namespace TaskWorker.Application.ModelViews
         public string? RefType { get; set; }
         public string? CreatedBy { get; set; }
     }
+    
 }
