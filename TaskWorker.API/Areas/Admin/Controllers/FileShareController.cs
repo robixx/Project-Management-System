@@ -28,5 +28,15 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
             return Ok(new { Message, Status  });
         }
+
+
+        [HttpGet("get-calendar-data")]
+        public async Task<IActionResult> GetCalendar(string StartDate, string ToDate)
+        {
+
+            var (Message, Status, Data) = await _fileShare.GetCalendarDataAsync(StartDate, ToDate);
+
+            return Ok(new { Message, Status, Data });
+        }
     }
 }

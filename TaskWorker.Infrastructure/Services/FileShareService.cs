@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace TaskWorker.Infrastructure.Services
             _connection = connection;
             _httpcontextaccessor = httpContextAccessor;
         }
+
+      
+
         public async Task<(string Message, bool Status)> ShareFileAsync(FileShareDto fileshare)
         {
             try
@@ -71,6 +75,23 @@ namespace TaskWorker.Infrastructure.Services
                 return($"Error: {ex.Message}", false);
             }
             
+        }
+
+
+        public async Task<(string Message, bool Status, List<CalendarDto> Data)> GetCalendarDataAsync(string StartDate, string ToDate)
+        {
+            try
+            {
+                var start = DateTime.ParseExact( StartDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+                var end = DateTime.ParseExact(ToDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+                return ("Data Retrived Successfully", true, new List<CalendarDto>());
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false, new List<CalendarDto>());
+            }
         }
     }
 }

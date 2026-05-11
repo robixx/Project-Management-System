@@ -10,5 +10,7 @@ namespace TaskWorker.Application.Interfaces
     public interface IFileShare
     {
         Task<(string Message, bool Status)> ShareFileAsync(FileShareDto fileshare);
+
+        Task<(string Message, bool Status, List<CalendarDto> Data)> GetCalendarDataAsync(string StartDate, string ToDate);
     }
 }
