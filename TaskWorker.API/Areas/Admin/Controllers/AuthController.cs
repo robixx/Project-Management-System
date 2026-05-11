@@ -49,12 +49,14 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                     Data = null,
                     Token = string.Empty
                 };
+
                 return Unauthorized(response);
             }
 
             try
             {
                 LoginResponseDto? response = await _auth.AuthenticateAsync(auth);
+
                 if (response != null && response.UserId > 0)
                 {
                     JwtUser jwt = new()

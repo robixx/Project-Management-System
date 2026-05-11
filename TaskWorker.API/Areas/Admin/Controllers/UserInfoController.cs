@@ -26,6 +26,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> UserInfo([FromForm] AppUserDto appUserDto )
         {
             var (status, message)= await _userinfo.SaveUserAsync(appUserDto);
+
             return Ok(new
             {
                 status ,
@@ -37,6 +38,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> UserRegister([FromBody] AppSecUserDto secUser)
         {
             var (status, message) = await _userinfo.SaveUserRegisterAsync(secUser);
+
             return Ok(new
             {
                 status,
@@ -48,6 +50,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetUserList()
         {
             var (message, status, data) = await _userinfo.GetUserListAsync();
+
             return Ok(new
             {
                 message,

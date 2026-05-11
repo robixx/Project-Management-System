@@ -28,6 +28,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> AssignTask([FromBody] TaskAssignDto assignDto)
         {
             var (Message, Status) = await _task.AssignTaskAsync(assignDto);
+
             return Ok(new { Message, Status });
         }
 
@@ -45,8 +46,11 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         [HttpPost("task-transfer")]
         public async Task<IActionResult> TransferTask([FromBody] TaskTransferDto transferDto)
         {
+
             var (Message, Status) = await _task.TransferTaskAsync(transferDto);
+
             return Ok(new { Message, Status });
+
         }
 
 
@@ -56,6 +60,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
 
             var (Message, Status, data) = await _task.TaskTransferListAsync();
+
             return Ok(new { Message, Status, data });
         }
 
@@ -64,6 +69,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> CloseTask(int TaskId)
         {
             var (Message, Status) = await _task.CloseTaskAsync(TaskId);
+
             return Ok(new { Message, Status });
         }
 
@@ -79,6 +85,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> IssueReview([FromBody] IssueReviewDto dto)
         {
             var (Message, Status) = await _task.AddIssueReviewAsync(dto);
+
             return Ok(new { Message, Status });
         }
     }

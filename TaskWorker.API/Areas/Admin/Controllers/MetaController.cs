@@ -42,6 +42,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetMetaDataList()
         {
             var data = await _metadata.GetMetaDataAsync();
+
             return Ok(data);
         }
 
@@ -68,6 +69,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetAllMetaDataList()
         {
             var (message, status, meta_list) = await _metadata.GetAllDataElementAsync();
+
             return Ok(new
             {
                 status,
@@ -81,6 +83,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetRoleList()
         {
             var (message, status, role_list) = await _metadata.GetRoleListAsync();
+
             return Ok(new
             {
                 status,
@@ -94,6 +97,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> CreateRole([FromBody] RoleDto roleDto)
         {
             var (message, status) = await _metadata.RoleCreateAsync(roleDto);
+
             if (status)
             {
                 return Ok(new { message, status });
@@ -108,6 +112,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetRoleWiseMenuList(int roleid)
         {
             var (status, message, menu_list) = await _metadata.RoleWiseMenuListAsync(roleid);
+
             return Ok(new
             {
                 status,
@@ -121,6 +126,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> MenuPermission([FromBody] List<MenuPermissionDto> menudata)
         {
             var (status, message) = await _metadata.RoleWiseMenuPermissionAsync(menudata);
+
             return Ok(new
             {
                 status,
@@ -133,6 +139,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetUserRoleList()
         {
             var (status, message, user_role_list) = await _metadata.GetUserRoleListAsync();
+
             return Ok(new
             {
                 status,
@@ -146,6 +153,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> UserRolePermission([FromBody] List<UserRoleSetDto> userrole)
         {
             var (status, message) = await _metadata.RoleWiseUserPermissionAsync(userrole);
+
             return Ok(new
             {
                 status,
@@ -158,6 +166,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetPriorityList()
         {
             var data = await _metadata.GetPriorityListAsync();
+
             return Ok(data);
            
         }

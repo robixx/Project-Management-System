@@ -24,6 +24,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> ProjectList()
         {
             var (Message, Status, data) = await _project.GetProjectListAsync();
+
             return Ok(new { Message, Status, data });
         }
 
@@ -33,6 +34,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
             
             var (Message, Status) = await _project.CreateProjectAsync(project);
+
             return Ok(new { Message, Status });
         }
 
@@ -40,6 +42,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> IssueList()
         {
             var (Message, Status, data) = await _project.GetIssueListAsync();
+
             return Ok(new { Message, Status, data });
         }
 
@@ -47,6 +50,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> AddIssue([FromBody] IssueDto issue)
         {
             var (Message, Status) = await _project.CreateIssueAsync(issue);
+
             return Ok(new { Message, Status });
         }
 
@@ -54,6 +58,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetAssignTypeList()
         {
             var (Message, Status, data) = await _project.GetAssignTypeListAsync();
+
             return Ok(new { Message, Status, data });
         }
 
@@ -61,6 +66,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> AddAssignType([FromBody] AssignTypeDto assignType)
         {
             var (Message, Status) = await _project.CreateAssignTypeAsync(assignType);
+
             return Ok(new { Message, Status });
         }
 
@@ -68,6 +74,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetWbsList(int projectId)
         {
             var (Message, Status, data) = await _project.GetWbsListAsync(projectId);
+
             return Ok(new { Message, Status, data });
         }
 
@@ -75,6 +82,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> AddWbs([FromBody] WbsDto wbs)
         {
             var (Message, Status) = await _project.CreateWbsAsync(wbs);
+
             return Ok(new { Message, Status });
         }
     }

@@ -42,6 +42,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetTeamList()
         {
             var data = await _baseData.GetTeamListAsync();
+
             return Ok(new { Message = "Team list retrieved successfully", Status = true, data });
         }
 
@@ -49,6 +50,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> AssignTeamMember([FromForm] AddGroupMemberDto addGroupMemberDto)
         {
             var (Message, Status) = await _group.AssignTeamMemberAsync(addGroupMemberDto);
+
             return Ok(new { Message, Status });
         }
     }
