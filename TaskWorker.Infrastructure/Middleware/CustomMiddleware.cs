@@ -21,12 +21,12 @@ namespace TaskWorker.Infrastructure.Middleware
             var path = context.Request.Path.Value ?? string.Empty;
             if (path.StartsWith("/swagger") || path.StartsWith("/projectHub") || path.Contains(".svg") || path.Contains(".js") || path.Contains(".css") || path.StartsWith("/favicon.ico"))
             {
-                // Let the request continue without modifying the response
+                
                 await _next(context);
                 return;
             }
 
-            // Log the request for diagnostics instead of writing into the response
+            
             _logger.LogDebug("CustomMiddleware invoked for {Path}", path);
 
             await _next(context);

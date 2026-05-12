@@ -104,7 +104,9 @@ namespace TaskWorker.Infrastructure.Services
                 );
 
                 var data = await _connection.Set<CalendarDto>()
+
                     .FromSqlRaw(@"SELECT * FROM public.""fn_GetCalendarData""({0}::date, {1}::date)",start,end)
+
                     .ToListAsync();
 
 

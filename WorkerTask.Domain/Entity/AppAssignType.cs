@@ -13,11 +13,8 @@ namespace TaskWorker.Domain.Entity
     {
         [Key]
         public int Id { get; set; }
-
         public string? TypeName { get; set; }
-
         public int IsActive { get; set; }
-
         public DateTime? CreatedDate { get; set; }
     }
 }

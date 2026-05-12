@@ -13,11 +13,14 @@ namespace TaskWorker.Infrastructure.Utility
 
         public static string Hash(string password)
         {
+
             return _hasher.HashPassword("", password);
+
         }
 
         public static bool Verify(string hashedPassword, string password)
         {
+
             return _hasher.VerifyHashedPassword("", hashedPassword, password)
                    == PasswordVerificationResult.Success;
         }
