@@ -48,6 +48,7 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppFileShare> AppFileShare {  get; set; }
         public DbSet<AppWbs> AppWbs { get; set; }
         public DbSet<CalendarDto> CalendarDto { get; set; }
+        public DbSet<Notification> Notification { get; set; }
 
 
 
@@ -123,6 +124,19 @@ namespace TaskWorker.Infrastructure.DBConnection
             {
                 entity.HasNoKey();
                 entity.ToView(null);
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("app_Notifications");
+
+                entity.HasKey(e => e.Id);
+
+                entity.HasIndex(e => new { e.UserId, e.Isread })
+               .HasDatabaseName("idx_notifications_user_read");
+
+                entity.HasIndex(e => new { e.UserId, e.CreatedAt })
+                      .HasDatabaseName("idx_notifications_user_created");
             });
 
             base.OnModelCreating(modelBuilder);
