@@ -9,6 +9,7 @@ namespace TaskWorker.Application.ModelViews
     public class DataElementDto
     {
         public int ElementId { get; set; }
+
         public int? MetaDataId { get; set; }
         public string? ElementValue { get; set; }
         public string? DataElementLevel { get; set; }

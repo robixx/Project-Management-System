@@ -110,7 +110,6 @@ else
     app.UseHsts();
 }
 
-// PIPELINE ORDER (IMPORTANT FIX)
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
@@ -123,7 +122,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-// CUSTOM MIDDLEWARE
 app.UseMiddleware<CustomMiddleware>();
 
 // SWAGGER
