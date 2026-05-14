@@ -15,9 +15,10 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
             _notification = notification;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var (Message, Status, data) = await _notification.SendNotification();
+            return Ok(new {Message,Status,data});
         }
     }
 }
