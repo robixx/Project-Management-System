@@ -19,13 +19,13 @@ namespace TaskWorker.Infrastructure.Services
     {
         private readonly DatabaseConnection _connection;
         private readonly IHttpContextAccessor _httpcontextaccessor;
-        private readonly HubService _hubService;
+       
 
-        public ProjectService(DatabaseConnection connection, IHttpContextAccessor httpcontextaccessor, HubService hubService)
+        public ProjectService(DatabaseConnection connection, IHttpContextAccessor httpcontextaccessor)
         {
             _connection = connection;
             _httpcontextaccessor = httpcontextaccessor;
-            _hubService = hubService;
+           
         }
 
         public async Task<(string Message, bool Status, List<ProjectDto> data)> GetProjectListAsync()
@@ -105,7 +105,7 @@ namespace TaskWorker.Infrastructure.Services
                 }
 
                 await _connection.SaveChangesAsync();
-                await _hubService.NotifyProjectUpdate("A new project has been created.");
+               
 
                 return ("Project saved successfully", true);
 
@@ -212,7 +212,7 @@ namespace TaskWorker.Infrastructure.Services
                 }
 
                 await _connection.SaveChangesAsync();
-                await _hubService.NotifyIssueAssignment("A new issue has been assigned.");
+               
 
                 return (msg, true);
             }
@@ -352,7 +352,7 @@ namespace TaskWorker.Infrastructure.Services
             var result = ("Project reviewed successfully", true);
             if (result.Item2)
             {
-                await _hubService.NotifyReview("A project has been reviewed.");
+                
             }
             return result;
         }
@@ -362,7 +362,7 @@ namespace TaskWorker.Infrastructure.Services
             var result = ("Project transferred successfully", true);
             if (result.Item2)
             {
-                await _hubService.NotifyTransfer("A project has been transferred.");
+               
             }
             return result;
         }
@@ -372,7 +372,7 @@ namespace TaskWorker.Infrastructure.Services
             var result = ("Project closed successfully", true);
             if (result.Item2)
             {
-                await _hubService.NotifyClose("A project has been closed.");
+               
             }
             return result;
         }
