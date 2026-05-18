@@ -15,7 +15,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         {
             _notification = notification;
         }
-        public async Task<IActionResult> Index()
+
+        [HttpGet("get-notifications")]
+        public async Task<IActionResult> GetNotifications()
         {
             var (Message, Status, data) = await _notification.SendNotification();
             return Ok(new {Message,Status,data});

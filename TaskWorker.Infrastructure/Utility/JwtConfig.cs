@@ -34,7 +34,7 @@ namespace TaskWorker.Infrastructure.Utility
                 var claims = new[] {
                     new Claim(type: "JWTId", jti),
                     new Claim(type: "UserId", value: auth.UserId.ToString() ?? ""),
-                    new Claim(type: "DispalyName",value: auth.DisplayName ?? ""),                   
+                    new Claim(type: "DisplayName",value: auth.DisplayName ?? ""),                   
                     new Claim(type: "RoleName",value: auth.RoleName?.ToString() ?? string.Empty),
                     new Claim(type: "RoleId",value: auth.RoleId.ToString()?? "0"),
                     new Claim(type: "UnitId",value: auth.UnitId.ToString()?? "0"),

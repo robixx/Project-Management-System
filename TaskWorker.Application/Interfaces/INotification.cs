@@ -9,6 +9,6 @@ namespace TaskWorker.Application.Interfaces
 {
     public interface INotification
     {
-        Task<(string Message, string Status, List<NotificationDto>data)> SendNotification();
+        Task<(string Message, bool Status, List<NotificationDto>data)> SendNotification();
     }
 }
