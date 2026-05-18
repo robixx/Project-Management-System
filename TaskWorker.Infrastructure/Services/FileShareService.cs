@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using TaskWorker.Application.Interfaces;
 using TaskWorker.Application.ModelViews;
 using TaskWorker.Domain.Entity;
 using TaskWorker.Infrastructure.DBConnection;
+using TaskWorker.Infrastructure.Middleware;
 
 namespace TaskWorker.Infrastructure.Services
 {
@@ -18,11 +20,13 @@ namespace TaskWorker.Infrastructure.Services
 
         private readonly DatabaseConnection _connection;
         private readonly IHttpContextAccessor _httpcontextaccessor;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public FileShareService(DatabaseConnection connection, IHttpContextAccessor httpContextAccessor)
+        public FileShareService(DatabaseConnection connection, IHttpContextAccessor httpContextAccessor, IHubContext<NotificationHub> hubContext)
         {
             _connection = connection;
             _httpcontextaccessor = httpContextAccessor;
+            _hubContext = hubContext;
         }
 
       
@@ -65,7 +69,30 @@ namespace TaskWorker.Infrastructure.Services
                 await _connection.AppFileShare.AddAsync(entity);
                 await _connection.SaveChangesAsync();
 
+                // SAVE NOTIFICATION
+                var notification = new Notification
+                {
+                    UserId = fileshare.UserId,
+                    Title = "File Shared",
+                    MessageValue = "A file has been shared with you",
+                    FromUser = sharedBy,
+                    Isread = 0,
+                    CreatedAt = DateTime.Now
+                };
+
+                await _connection.Notification.AddAsync(notification);
+                await _connection.SaveChangesAsync();
+
+                // SIGNALR NOTIFICATION
+                await _hubContext.Clients.User(fileshare.UserId.ToString())
+                    .SendAsync("ReceiveNotification", new
+                    {
+                        title = notification.Title,
+                        message = notification.MessageValue
+                    });
+
                 return ("File shared successfully", true);
+              
 
 
 

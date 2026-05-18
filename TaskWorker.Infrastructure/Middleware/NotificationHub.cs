@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace TaskWorker.Infrastructure.Middleware
 {
-    public class ProjectHub : Hub
+    public class NotificationHub : Hub
     {
         public async Task NotifyProjectUpdate(string message)
         {

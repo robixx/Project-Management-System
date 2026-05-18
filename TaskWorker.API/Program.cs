@@ -135,6 +135,6 @@ app.UseSwaggerUI(c =>
 // ENDPOINTS
 app.MapControllers();
 
-app.MapHub<ProjectHub>("/projectHub");
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
