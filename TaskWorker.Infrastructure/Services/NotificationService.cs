@@ -29,17 +29,36 @@ namespace TaskWorker.Infrastructure.Services
                 var displayName = _httpcontextaccessor.HttpContext?.User?.FindFirst("DisplayName")?.Value;
 
                 int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;
-                var query= await _connection.Notification.Where(n => n.UserId == UserId)
-                    .Select(n => new NotificationDto
-                    {
-                        Id = n.Id,
-                        UserId = n.UserId,
-                        Title = n.Title,
-                        MessageValue = n.MessageValue,
-                        FromUser = n.FromUser,
-                        Isread = n.Isread,
-                        CreatedAt = n.CreatedAt
-                    }).AsNoTracking().ToListAsync();
+
+
+                var query = await (
+                 from n in _connection.Notification
+
+                 join fromUser in _connection.AppUser
+                     on n.FromUser equals fromUser.UserId
+
+                 join toUser in _connection.AppUser
+                     on n.UserId equals toUser.UserId
+
+                 where n.UserId == UserId
+
+                 select new NotificationDto
+                 {
+                     Id = n.Id,
+                     UserId = n.UserId,
+                     Title = n.Title,
+                     MessageValue = n.MessageValue,
+                     FromUser = n.FromUser,
+                     Isread = n.Isread,
+                     CreatedAt = n.CreatedAt,
+                     // FROM USER
+                     FromUserName = fromUser.UserName,                 
+
+                     ToUserName = toUser.UserName,
+                     
+                 })
+                 .AsNoTracking()
+                 .ToListAsync();
 
                 return ($"Data Retrieved for User {displayName}", true, query);
 

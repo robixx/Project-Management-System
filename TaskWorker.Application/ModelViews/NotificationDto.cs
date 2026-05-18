@@ -13,6 +13,8 @@ namespace TaskWorker.Application.ModelViews
         public string? Title { get; set; }
         public string? MessageValue { get; set; }
         public int FromUser { get; set; }
+        public string? FromUserName { get; set; } = string.Empty;
+        public string? ToUserName { get; set; } = string.Empty;
         public int Isread { get; set; } = 0;
         public DateTime? CreatedAt { get; set; }
     }
