@@ -32,6 +32,7 @@ namespace TaskWorker.Infrastructure.Utility
 
                 auth.TokenExpired = DateTime.UtcNow.AddMinutes(expirationTime);
                 var claims = new[] {
+
                     new Claim(type: "JWTId", jti),
                     new Claim(ClaimTypes.NameIdentifier, auth.UserId.ToString()),
                     new Claim(type: "UserId", value: auth.UserId.ToString() ?? ""),
