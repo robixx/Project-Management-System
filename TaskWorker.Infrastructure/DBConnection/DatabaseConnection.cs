@@ -57,28 +57,54 @@ namespace TaskWorker.Infrastructure.DBConnection
 
             //for entity databse
             modelBuilder.Entity<AppUser>().HasKey(x => x.UserId);
+
             modelBuilder.Entity<AppMetaData>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppMetaElement>().HasKey(x => x.ElementId);
+
             modelBuilder.Entity<AppGroupMember>().HasKey(x => x.MemberId);
+
             modelBuilder.Entity<AppIssue>().HasKey(x => x.IssueId);
+
             modelBuilder.Entity<AppMenu>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppProject>().HasKey(x => x.ProjectId);
+
             modelBuilder.Entity<AppRole>().HasKey(x => x.RoleId);
+
             modelBuilder.Entity<AppRoleWiseMenu>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppTask>().HasKey(x => x.TasksId);
+
             modelBuilder.Entity<AppTaskAssign>().HasKey(x => x.AssignId);
+
             modelBuilder.Entity<AppTeam>().HasKey(x => x.TeamId);
+
             modelBuilder.Entity<AppWorkDocument>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppEncryptedData>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppSecUser>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppAssignType>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppTaskStatus>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppTaskPriority>().HasKey(x => x.PriorityId);
+
             modelBuilder.Entity<TaskTransferHistory>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppFileUpload>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppIssueReview>().HasKey(x => x.Id);
+
             modelBuilder.Entity<AppWbs>().HasKey(x => x.WbsId);
+
             modelBuilder.Entity<CalendarDto>().HasNoKey();
+
+            modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();
+
+            modelBuilder.Entity<UserRoleDto>().HasNoKey();
 
             modelBuilder.Entity<TaskAssignment>(entity =>
             {
@@ -113,12 +139,8 @@ namespace TaskWorker.Infrastructure.DBConnection
 
                 entity.HasIndex(e => new { e.UserId, e.DepartmentId })
                       .IsUnique();
-            });            
-            // for Procedure
-
-            modelBuilder.Entity<RoleWiseMenuDto>().HasNoKey();
-           
-            modelBuilder.Entity<UserRoleDto>().HasNoKey();
+            });          
+                      
 
             modelBuilder.Entity<GetUnitDto>(entity =>
             {

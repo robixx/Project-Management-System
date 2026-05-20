@@ -23,8 +23,11 @@ namespace TaskWorker.Infrastructure.Utility
         public string Generate(JwtUser auth)
         {
             var jti = Guid.NewGuid().ToString();
+
             var jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT key is not configured.");
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             try
             {
@@ -68,6 +71,7 @@ namespace TaskWorker.Infrastructure.Utility
             try
             {
                 var jtiClaim = httpContextIdentity.FindFirst("JWTId")?.Value;
+
                 if (string.IsNullOrEmpty(jtiClaim))
                 {
 
@@ -75,7 +79,9 @@ namespace TaskWorker.Infrastructure.Utility
                 }
 
                 var identity = httpContextIdentity ?? throw new SecurityTokenException("JWT Token Invalid."); //
+
                 var claims = identity.Claims;
+
                 var auth = new JwtUser
                 {
                     JWTId = jtiClaim,
