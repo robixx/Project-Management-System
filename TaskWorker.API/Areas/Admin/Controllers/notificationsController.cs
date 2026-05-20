@@ -20,6 +20,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public async Task<IActionResult> GetNotifications()
         {
             var (Message, Status, data) = await _notification.SendNotification();
+
             return Ok(new {Message,Status,data});
         }
     }

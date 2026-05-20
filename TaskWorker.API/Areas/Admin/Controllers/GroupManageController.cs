@@ -13,6 +13,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
     public class groupmanageController : ControllerBase
     {
         private readonly IGroup _group;
+
         private readonly IBaseData _baseData;
 
         public groupmanageController(IGroup group, IBaseData baseData)
