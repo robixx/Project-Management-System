@@ -19,6 +19,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
         public groupmanageController(IGroup group, IBaseData baseData)
         {
             _group = group;
+
             _baseData = baseData;
         }
 

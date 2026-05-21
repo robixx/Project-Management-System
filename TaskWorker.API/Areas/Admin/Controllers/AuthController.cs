@@ -76,7 +76,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                     var successResponse = new ApiResponse<object>
                     {
                         Code = "200",
-                        Message = "Login Successful",
+                        Message = "Login Successfully",
                         Data = userProfle,
                         Token = strToken
                     };
@@ -87,7 +87,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
                 var failResponse = new ApiResponse<object>
                 {
                     Code = "108",
-                    Message = "Invalid username/password",
+                    Message = "Invalid UserName/Password",
                     Data = null,
                     Token = string.Empty
                 };
@@ -95,6 +95,7 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
+
                 var errorResponse = new ApiResponse<object>
                 {
                     Code = "500",

@@ -14,6 +14,7 @@ namespace TaskWorker.Domain.Entity
         [Key]
         public int Id { get; set; }
         public int? OwnerId { get; set; }
+
         [StringLength(250)]
         public string? EncriptedData { get; set; }
     }
