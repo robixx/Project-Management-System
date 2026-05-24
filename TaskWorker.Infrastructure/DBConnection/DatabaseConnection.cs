@@ -36,18 +36,31 @@ namespace TaskWorker.Infrastructure.DBConnection
         public DbSet<AppUserRole> AppUserRole {  get; set; }
         public DbSet<UserRoleDto> UserRoleDto {  get; set; }
         public DbSet<AppDepartmentApproved> AppDepartmentApproved {  get; set; }
+
         public DbSet<GetUnitDto> GetUnitDto {  get; set; }
+
         public DbSet<AppAssignType> AppAssignType {  get; set; }
+
         public DbSet<AppTaskStatus> AppTaskStatus {  get; set; }
+
         public DbSet<AppTaskPriority> AppTaskPriority {  get; set; }
+
         public DbSet<TaskAssignment> TaskAssignment {  get; set; }
+
         public DbSet<TaskTransferHistory> TaskTransferHistory {  get; set; }
+
         public DbSet<TaskTransferHistoryViewDto> TaskTransferHistoryViewDto {  get; set; }
+
         public DbSet<AppFileUpload> AppFileUpload {  get; set; }
+
         public DbSet<AppIssueReview> AppIssueReview {  get; set; }
+
         public DbSet<AppFileShare> AppFileShare {  get; set; }
+
         public DbSet<AppWbs> AppWbs { get; set; }
+
         public DbSet<CalendarDto> CalendarDto { get; set; }
+
         public DbSet<Notification> Notification { get; set; }
 
 
@@ -115,11 +128,14 @@ namespace TaskWorker.Infrastructure.DBConnection
             modelBuilder.Entity<AppFileShare>()
                 .HasIndex(x => new { x.FileId, x.UserId })
                 .IsUnique();
+
             modelBuilder.Entity<TaskTransferHistoryViewDto>(entity =>
             {
                 entity.HasNoKey();
                 entity.ToView("get_task_transfer_history()");
             });
+
+
             modelBuilder.Entity<AppUserRole>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -130,6 +146,7 @@ namespace TaskWorker.Infrastructure.DBConnection
                       .IsUnique();
 
             });
+
 
             modelBuilder.Entity<AppDepartmentApproved>(entity =>
             {
@@ -148,6 +165,7 @@ namespace TaskWorker.Infrastructure.DBConnection
                 entity.ToView(null);
             });
 
+
             modelBuilder.Entity<Notification>(entity =>
             {
                 entity.ToTable("app_Notifications");
@@ -160,6 +178,7 @@ namespace TaskWorker.Infrastructure.DBConnection
                 entity.HasIndex(e => new { e.UserId, e.CreatedAt })
                       .HasDatabaseName("idx_notifications_user_created");
             });
+
 
             base.OnModelCreating(modelBuilder);
         }

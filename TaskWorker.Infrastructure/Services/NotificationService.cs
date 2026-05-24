@@ -13,7 +13,9 @@ namespace TaskWorker.Infrastructure.Services
 {
     public class NotificationService : INotification
     {
+
         private readonly DatabaseConnection _connection;
+
         private readonly IHttpContextAccessor _httpcontextaccessor;
 
         public NotificationService(DatabaseConnection connection, IHttpContextAccessor httpcontextaccessor)
@@ -25,7 +27,9 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
+
                 var userId = _httpcontextaccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
+
                 var displayName = _httpcontextaccessor.HttpContext?.User?.FindFirst("DisplayName")?.Value;
 
                 int UserId = int.TryParse(userId, out int parsedUserId) ? parsedUserId : 0;

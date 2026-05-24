@@ -6,7 +6,9 @@ namespace TaskWorker.Infrastructure.Middleware
 {
     public class CustomMiddleware
     {
+
         private readonly RequestDelegate _next;
+
         private readonly ILogger<CustomMiddleware> _logger;
 
         public CustomMiddleware(RequestDelegate next, ILogger<CustomMiddleware> logger)
@@ -19,6 +21,7 @@ namespace TaskWorker.Infrastructure.Middleware
         {
             // Avoid writing to the response body for static files, swagger or hub endpoints
             var path = context.Request.Path.Value ?? string.Empty;
+
             if (path.StartsWith("/swagger") || path.StartsWith("/projectHub") || path.Contains(".svg") || path.Contains(".js") || path.Contains(".css") || path.StartsWith("/favicon.ico"))
             {
                 

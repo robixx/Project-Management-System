@@ -13,6 +13,7 @@ namespace TaskWorker.Infrastructure.Services
 {
     public class MetaService : IBaseData
     {
+
         private readonly DatabaseConnection _connection;
 
         public MetaService(DatabaseConnection connection)

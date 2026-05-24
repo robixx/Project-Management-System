@@ -5,6 +5,7 @@ namespace TaskWorker.Infrastructure.Middleware
 {
     public class NotificationHub : Hub
     {
+
         public async Task ReceiveNotification(string title, string message)
         {
             await Clients.All.SendAsync("ReceiveNotification", title, message);

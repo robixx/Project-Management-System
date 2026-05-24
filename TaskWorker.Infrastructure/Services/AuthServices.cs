@@ -14,12 +14,14 @@ namespace TaskWorker.Infrastructure.Services
 {
     public class AuthServices : IAuth
     {
+
         private readonly DatabaseConnection _connection;
 
         public AuthServices(DatabaseConnection connection)
         {
             _connection = connection;
         }
+
         public async Task<LoginResponseDto> AuthenticateAsync(LoginReqquest loginRequest)
         {
             try
@@ -65,6 +67,7 @@ namespace TaskWorker.Infrastructure.Services
             }
             catch (Exception ex)
             {
+
                 Console.WriteLine($"Error: {ex.Message}");
 
                 return new LoginResponseDto();
