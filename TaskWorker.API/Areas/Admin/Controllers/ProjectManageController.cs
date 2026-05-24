@@ -46,6 +46,8 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             return Ok(new { Message, Status, data });
         }
 
+
+
         [HttpPost("issue-create")]
         public async Task<IActionResult> AddIssue([FromBody] IssueDto issue)
         {
@@ -53,6 +55,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
             return Ok(new { Message, Status });
         }
+
+
+
 
         [HttpGet("get-assign-type-list")]
         public async Task<IActionResult> GetAssignTypeList()
@@ -62,6 +67,8 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             return Ok(new { Message, Status, data });
         }
 
+
+
         [HttpPost("add-assigntype")]
         public async Task<IActionResult> AddAssignType([FromBody] AssignTypeDto assignType)
         {
@@ -70,6 +77,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
             return Ok(new { Message, Status });
         }
 
+
+
+
         [HttpGet("get-wbs-list/{projectId}")]
         public async Task<IActionResult> GetWbsList(int projectId)
         {
@@ -77,6 +87,9 @@ namespace TaskWorker.API.Areas.Admin.Controllers
 
             return Ok(new { Message, Status, data });
         }
+
+
+
 
         [HttpPost("add-wbs")]
         public async Task<IActionResult> AddWbs([FromBody] WbsDto wbs)
