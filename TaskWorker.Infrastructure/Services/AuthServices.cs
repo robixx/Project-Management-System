@@ -26,6 +26,7 @@ namespace TaskWorker.Infrastructure.Services
         {
             try
             {
+
                 var user = await _connection.AppSecUser
                     .Where(u => u.LoginName == loginRequest.loginName && u.IsActive == 1)
                     .Select(u => new
@@ -52,6 +53,7 @@ namespace TaskWorker.Infrastructure.Services
                 var role = await _connection.AppUserRole
                     .FirstOrDefaultAsync(r => r.UserId == user.UserId);
 
+
                 var lrole = role != null
                     ? await _connection.AppRole.FirstOrDefaultAsync(r => r.RoleId == role.RoleId)
                     : null;
@@ -64,6 +66,7 @@ namespace TaskWorker.Infrastructure.Services
                     RoleId = role?.RoleId ?? 0,
                     UnitId = user.UnitId
                 };
+
             }
             catch (Exception ex)
             {
@@ -71,6 +74,7 @@ namespace TaskWorker.Infrastructure.Services
                 Console.WriteLine($"Error: {ex.Message}");
 
                 return new LoginResponseDto();
+
             }
         }
     }

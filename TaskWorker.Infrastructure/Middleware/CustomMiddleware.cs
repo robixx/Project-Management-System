@@ -19,7 +19,7 @@ namespace TaskWorker.Infrastructure.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // Avoid writing to the response body for static files, swagger or hub endpoints
+            
             var path = context.Request.Path.Value ?? string.Empty;
 
             if (path.StartsWith("/swagger") || path.StartsWith("/projectHub") || path.Contains(".svg") || path.Contains(".js") || path.Contains(".css") || path.StartsWith("/favicon.ico"))

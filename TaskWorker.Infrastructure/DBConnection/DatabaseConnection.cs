@@ -18,23 +18,41 @@ namespace TaskWorker.Infrastructure.DBConnection
         
         // for data table
         public DbSet<AppUser> AppUser {  get; set; }
+
         public DbSet<AppGroupMember> AppGroupTeam {  get; set; }
+
         public DbSet<AppIssue> AppIssue {  get; set; }
+
         public DbSet<AppMenu> AppMenu {  get; set; }
+
         public DbSet<AppProject> AppProject {  get; set; }
+
         public DbSet<AppRole> AppRole {  get; set; }
+
         public DbSet<AppRoleWiseMenu> AppRoleWiseMenu {  get; set; }
+
         public DbSet<AppTask> AppTask {  get; set; }
+
         public DbSet<AppTaskAssign> AppTaskAssign {  get; set; }
+
         public DbSet<AppTeam> AppTeam {  get; set; }
+
         public DbSet<AppWorkDocument> AppWorkDocument {  get; set; }
+
         public DbSet<AppMetaData> AppMetaData {  get; set; }
+
         public DbSet<AppMetaElement> AppMetaElement {  get; set; }
+
         public DbSet<AppEncryptedData> AppEncryptedData {  get; set; }
+
         public DbSet<AppSecUser> AppSecUser {  get; set; }
+
         public DbSet<RoleWiseMenuDto> RoleWiseMenuDto {  get; set; }
+
         public DbSet<AppUserRole> AppUserRole {  get; set; }
+
         public DbSet<UserRoleDto> UserRoleDto {  get; set; }
+
         public DbSet<AppDepartmentApproved> AppDepartmentApproved {  get; set; }
 
         public DbSet<GetUnitDto> GetUnitDto {  get; set; }

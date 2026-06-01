@@ -19,13 +19,18 @@ namespace TaskWorker.Infrastructure.Services
     {
 
         private readonly DatabaseConnection _connection;
+
         private readonly IHttpContextAccessor _httpcontextaccessor;
+
         private readonly IHubContext<NotificationHub> _hubContext;
 
         public FileShareService(DatabaseConnection connection, IHttpContextAccessor httpContextAccessor, IHubContext<NotificationHub> hubContext)
         {
+
             _connection = connection;
+
             _httpcontextaccessor = httpContextAccessor;
+
             _hubContext = hubContext;
         }
 
